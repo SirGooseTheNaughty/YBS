@@ -1,0 +1,943 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap");
+
+:root {
+  --fontBlack: #333333;
+  --fontWhite: #F2F2F2;
+  --fontGray: #828282;
+  --fontGray2: #4F4F4F;
+
+  --homeColor: #F5D5B5;
+  --liteColor: #DCE7C1 ;
+  --avanColor: #D5D0DC;
+
+  --orderBtnColor: #F08D46;
+  --orderBtnDisactive: #CDCDCD;
+
+  --promocodeBg: #F3EDE5;
+  --promoPicBg__enter: #F08D46;
+  --promoPicBg__ok: #B0CB6C;
+  --promoPicBg__bad: #DF5951;
+}
+
+/* main */
+.configurator {
+  width: max-content;
+  margin: 0 auto;
+  font-family: 'Rubik', sans-serif;
+  user-select: none;
+}
+.configurator a {
+  text-decoration: underline !important;
+}
+.content {
+  display: grid;
+  grid-template-rows: 61px 670px auto;
+  grid-template-columns: 660px 500px;
+  grid-template-areas:
+      "tabs ."
+      "left right"
+      ". right";
+  color: var(--fontBlack);
+  font-size: 18px;
+}
+[data-tab="home"] {
+  --lighterColor: #FFF7EC;
+  --mainColor: #F5D5B5 ;
+  --darkerColor: #F9E1C3;
+  --darkColor: #F08D46;
+  --nutritionColor: #EBAE70;
+}
+[data-tab="lite"] {
+  --lighterColor: #F0F4E5;
+  --mainColor: #DCE7C1 ;
+  --darkerColor: #C5D699;
+  --darkColor: #B0CB6C;
+  --nutritionColor: #BAD084;
+}
+[data-tab="avan"] {
+  --lighterColor: #F2F2F2;
+  --mainColor: #D5D0DC ;
+  --darkerColor: #ACA7B5;
+  --darkColor: #8D839C;
+  --nutritionColor: #9791A0;
+}
+
+/* segments */
+.tabs {
+  grid-area: tabs;
+  display: flex;
+  align-items: flex-end;
+  height: 61px;
+}
+.left {
+  background-color: var(--mainColor);
+  grid-area: left;
+  border-bottom-left-radius: 15px;
+  padding: 41px 48px 18px 48px;
+}
+.right {
+  background-color: var(--lighterColor);
+  grid-area: right;
+  border-bottom-right-radius: 15px;
+  border-top-right-radius: 15px;
+  padding: 63px 51px 64px 51px;
+}
+
+/* tabs */
+.tab {
+  width: 220px;
+  height: 90%;
+  border-radius: 15px 15px 0 0;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 24px;
+  transition: height 0.4s ease;
+  cursor: pointer;
+}
+.tab.active {
+  height: 100%;
+  font-weight: bold;
+}
+.tabHome {
+  background-color: var(--homeColor);
+}
+.tabLite {
+  background-color: var(--liteColor);
+}
+.tabAvan {
+  background-color: var(--avanColor);
+}
+
+/* left */
+.tagline {
+  display: flex;
+  margin-bottom: 34px;
+  align-items: center;
+}
+.tagline .taglinePic {
+  margin-right: 12px;
+  height: 30px;
+}
+.tagline p {
+  color: var(--darkColor);
+  font-size: 22px;
+  font-weight: bold;
+  user-select: auto;
+  margin: 0;
+}
+.leftContent {
+  display: grid;
+  grid-template-rows: repeat(4, auto);
+  grid-template-areas: 
+      "first"
+      "second"
+      "third";
+}
+.numDishes {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 35px;
+}
+.dish {
+  position: relative;
+  width: 100%;
+  height: 83px;
+  background-color: var(--lighterColor);
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  line-height: .9em;
+  padding: 0 28px;
+  box-sizing: border-box;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.dish:last-child {
+  margin-right: 0;
+}
+.noMargin {
+  margin-right: 0;
+}
+.dish.active {
+  background-color: var(--darkColor);
+  color: var(--fontWhite);
+}
+.dish.hit::after {
+  content: 'HIT';
+  position: absolute;
+  top: 0;
+  right: 13px;
+  width: 48px;
+  height: 26px;
+  transform: translateY(-50%);
+  border-radius: 13px;
+  color: var(--fontWhite);
+  font-size: 14px;
+  background-color: var(--darkColor);
+  display: grid;
+  place-items: center;
+}
+.dish.active.hit::after {
+  background-color: var(--lighterColor);
+  color: var(--fontBlack);
+}
+[data-tab="lite"] .dish:nth-child(2n) {
+  display: none;
+}
+.menuSampleCont {
+  display: grid;
+  place-items: center baseline;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 35px 1fr;
+  grid-template-areas:
+      "text button"
+      "pics pics";
+  margin-bottom: 21px;
+}
+.menuSampleCont .menuSampleText {
+  grid-area: text;
+}
+.menuSampleCont .daySwitch {
+  grid-area: button;
+}
+.menuSampleCont .pics {
+  grid-area: pics;
+}
+.nutrition {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: auto;
+}
+.daySwitch {
+  place-self: end;
+  display: flex;
+  width: 220px;
+  justify-content: space-between;
+  align-items: center;
+}
+.daySwitch .button {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: var(--lighterColor);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.daySwitch .prev {
+  transform: rotate(180deg);
+}
+.pics {
+  place-self: baseline;
+  width: 100%;
+  display: grid;
+  place-items: end;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 121px);
+  grid-gap: 20px 32px;
+  padding-top: 20px;
+  transform: scale(1.02);
+  box-sizing: border-box;
+}
+.pic {
+  max-width: 100%;
+  max-height: 100%;
+  user-select: none;
+}
+.dishPicCont {
+  width: 163px;
+  height: 121px;
+  position: relative;
+}
+.dishPopup__icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  opacity: 0;
+  cursor: pointer;
+}
+.dishPicCont:hover .dishPopup__icon {
+  opacity: 1;
+}
+.dishPopup {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  max-width: 190px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 19px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  box-sizing: border-box;
+  transition: opacity 0.4s;
+  z-index: 99;
+}
+.dishPopup__title {
+  color: var(--fontBlack);
+  margin-bottom: 12px;
+}
+.dishPopup__weight,
+.dishPopup__ing {
+  color: var(--fontBlack);
+  margin-bottom: 5px;
+  color: var(--orderBtnColor);
+}
+.dishPopup__weight {
+  margin-bottom: 5px;
+}
+.dishPopup__weightValue,
+.dishPopup__ingValue {
+  color: var(--fontGray2);
+  font-weight: 400;
+}
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.nutrition {
+  background-color: var(--nutritionColor);
+  padding: 9px 18px;
+}
+.menuLink {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  color: var(--fontBlack) !important;
+  margin-top: 15px;
+  text-align: center;
+}
+
+/* right */
+.question {
+  color: var(--fontGray2);
+  margin-bottom: 21px;
+}
+.days,
+.numDaysSelect {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.day,
+.numDays {
+  width: 188px;
+  height: 48px;
+  border-radius: 15px;
+  background-color: var(--mainColor);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+.numDay {
+  margin-right: .3em;
+  font-weight: bold;
+}
+.dayPrice {
+  font-weight: normal;
+  color: var(--darkColor);
+}
+.day.active,
+.numDays.active {
+  background-color: var(--darkColor);
+  color: var(--fontWhite);
+}
+.numDays.active .numDay {
+  color: var(--fontWhite);
+  font-weight: bolder;
+}
+.numDays.active .dayPrice {
+  color: var(--fontWhite);
+}
+.price {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.priseResults {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+}
+.totalPrice {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--fontGray2);
+  margin-bottom: 3px;
+}
+.yourProfit {
+  text-align: end;
+  color: var(--orderBtnColor);
+  font-size: 14px;
+}
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: var(--darkColor);
+  margin-bottom: 25px;
+}
+.payment {
+  display: flex;
+  margin-bottom: 32px;
+}
+.paymentMethod {
+  position: relative;
+  display: flex;
+  padding-left: 40px;
+  cursor: pointer;
+}
+.paymentMethod:first-child {
+  margin-right: 40px;
+}
+.paymentMethod::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--mainColor);
+}
+.paymentMethod.checked::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(4px, 4px);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--darkColor);
+}
+/* checkout */
+.phone,
+.promocode {
+  width: 100%;
+  height: 45px;
+  background-color: white;
+  color: var(--fontGray);
+  border: none;
+  padding: 16px 40px;
+  box-sizing: border-box;
+  margin-bottom: 29px;
+  font-size: 18px;
+}
+.promo {
+  position: relative;
+  margin-bottom: 15px;
+}
+.promocode {
+  background-color: var(--promocodeBg);
+  border-radius: 15px;
+  margin: 0;
+}
+.promo__pic {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 45px;
+  width: 45px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.promo.enter .promo__pic {
+  background-color: var(--promoPicBg__enter);
+}
+.promo.ok .promo__pic {
+  background-color: var(--promoPicBg__ok);
+}
+.promo.bad .promo__pic {
+  background-color: var(--promoPicBg__bad);
+}
+.promo__status {
+  height: 14px;
+  margin-top: 8px;
+  font-size: 12px;
+  text-align: center;
+}
+.promo.enter .promo__status {
+  opacity: 0;
+}
+.promo.ok .promo__status {
+  color: var(--promoPicBg__ok);
+  opacity: 1;
+}
+.promo.bad .promo__status {
+  color: var(--promoPicBg__bad);
+  opacity: 1;
+}
+.button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.button button {
+  width: 188px;
+  height: 58px;
+  background-color: var(--orderBtnDisactive);
+  transition: background-color 0.4s ease;
+  color: var(--fontWhite);
+  text-transform: uppercase;
+  font-weight: bold;
+  border: none;
+  border-radius: 15px;
+  font-size: 20px;
+  box-sizing: border-box;
+  cursor: auto;
+  pointer-events: none;
+}
+.button button.active {
+  background-color: var(--orderBtnColor);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.confidential {
+  color: var(--fontGray);
+  font-size: 14px;
+  font-weight: lighter;
+  width: 195px;
+  margin: 0;
+}
+.confidential a {
+  color: var(--fontGray) !important;
+}
+
+@media screen and (min-width: 1200px) {
+  .dish:not(.active):hover {
+      background-color: var(--darkerColor);
+  }
+  .daySwitch .button:hover {
+      background-color: var(--darkerColor);
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .content {
+      grid-template-rows: 61px 685px;
+      grid-template-columns: 540px 400px;
+  }
+  .left, .right {
+      padding-left: 45px;
+      padding-right: 45px;
+  }
+  .right {
+      background-color: var(--lighterColor);
+      grid-area: right;
+      border-bottom-right-radius: 15px;
+      border-top-right-radius: 15px;
+      padding: 43px 60px 0 42px;
+  }
+  .tagline {
+      margin-bottom: 36px;
+  }
+  .tagline p {
+      font-size: 18px;
+      transform: translateY(3px); 
+  }
+  .tagline .taglinePic {
+      margin-right: 18px;
+  }
+  .tagline svg {
+      width: 30px;
+      height: 30px;
+  }
+  .tab {
+      font-size: 20px;
+  }
+  .numDishes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 35px;
+  }
+  .dish {
+      width: 214px;
+      height: 60px;
+      padding: 0;
+      margin: 0;
+  }
+  .dish:first-child {
+      margin-right: 17px;
+      margin-bottom: 21px;
+  }
+  .content[data-active-tab='lite'] .dish:first-child {
+      margin-bottom: 0;
+  }
+  .daySwitch {
+      width: 120px;
+  }
+  .menuSampleCont {
+      grid-template-rows: 35px 1fr;
+      margin-bottom: 36px;
+  }
+  .pics {
+      grid-template-rows: repeat(2, 101px);
+      grid-gap: 21px 21px;
+      padding-top: 16px;
+  }
+  .dishPopup__icon {
+      opacity: 1;
+  }
+  .dishPicCont {
+      width: 134px;
+      height: 101px;
+  }
+  .days {
+      margin-bottom: 32px;
+  }
+  .numDaysSelect {
+      margin-bottom: 26px;
+  }
+  .day,
+  .numDays {
+      width: 144px;
+  }
+  .price {
+      margin-bottom: 21px;
+  }
+  .payment {
+      flex-flow: column;
+      margin-bottom: 34px;
+  }
+  .paymentMethod:first-child {
+      margin-bottom: 15px;
+  }
+  .phone {
+      margin-bottom: 26px;
+  }
+  .button {
+      flex-flow: column;
+      align-items: flex-start;
+  }
+  .confidential {
+      width: 230px;
+      margin: 14px 0;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .content {
+      grid-template-rows: 61px 1fr auto;
+      grid-template-columns: 620px;
+      grid-template-areas:
+          "tabs"
+          "left"
+          "right";
+  }
+  .left {
+      border-bottom-left-radius: 0;
+      height: max-content;
+      padding: 36px 58px 0 45px;
+  }
+  .right {
+      background-color: var(--mainColor);
+      padding-top: 32px;
+      padding-bottom: 54px;
+      border-bottom-left-radius: 15px;
+      border-top-right-radius: 0;
+  }
+  .tagline {
+      margin-bottom: 31px;
+  }
+  .numDishes {
+      margin-top: 32px;
+      margin-bottom: 0;
+      grid-area: third;
+  }
+  .daySwitch .button {
+      width: 28px;
+      height: 28px;
+  }
+  .dish:first-child {
+      margin-right: 17px;
+      margin-bottom: 22px;
+  }
+  .dish {
+      width: 250px;
+  }
+  .menuSampleCont {
+      grid-template-rows: 35px 1fr;
+      margin-bottom: 21px;
+      grid-area: first;
+  }
+  .pics {
+      grid-template-rows: 122px;
+      grid-gap: 20px 18px;
+  }
+  .pic {
+      height: 124px;
+  }
+  .dishPicCont {
+      width: 160px;
+      height: 122px;
+  }
+  .nutritionAndLink {
+      grid-area: second;
+  }
+  .menuLink {
+      margin-top: 15px;
+  }
+  .day,
+  .numDays {
+      background-color: var(--lighterColor);
+      width: 245px;
+      height: 60px;
+  }
+  .price {
+       margin-bottom: 31px;
+  }
+  .payment {
+      flex-flow: row;
+  }
+  .paymentMethod:first-child {
+      margin-right: 100px;
+  }
+  .paymentMethod::before {
+      background-color: var(--lighterColor);
+  }
+  .phone {
+      margin-bottom: 35px;
+  }
+  .button {
+      flex-flow: row;
+      align-items: center;
+  }
+  .button button {
+      width: 250px;
+      height: 60px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .content {
+      grid-template-rows: 52px 1fr auto;
+      grid-template-columns: 460px;
+  }
+  .left, .right {
+      padding-left: 28px;
+      padding-right: 28px;
+  }
+  .left {
+      padding-top: 30px;
+  }
+  .right {
+      padding-bottom: 48px;
+  }
+  .tabs {
+      height: 52px;
+  }
+  .tab {
+      font-size: 18px;
+  }
+  .tagline {
+      margin-bottom: 24px;
+  }
+  .tagline p {
+      font-size: 16px;
+  }
+  .dish:first-child {
+      margin-right: 21px;
+  }
+  .dish {
+      width: 190px;
+      height: 54px;
+  }
+  .menuSampleCont {
+      grid-template-rows: 35px 1fr;
+      margin-bottom: 26px;
+  }
+  .pics {
+      grid-template-rows: 95px;
+      grid-gap: 16px 14px;
+      padding-top: 22px;
+  }
+  .pic {
+      height: 97px;
+  }
+  .dishPicCont {
+      width: 124px;
+      height: 95px;
+  }
+  .nutrition {
+      font-size: 16px;;
+  }
+  .menuLink {
+      margin-top: 15px;
+  }
+  .day,
+  .numDays {
+      width: 190px;
+      height: 54px;
+  }
+  .price {
+      margin-bottom: 21px;
+  }
+  .paymentMethod:first-child {
+      margin-right: 36px;
+  }
+  .phone {
+      margin-bottom: 32px;
+  }
+  .button {
+      flex-flow: row;
+      align-items: center;
+      justify-content: space-between;
+  }
+  .button button {
+      width: 190px;
+  }
+  .confidential {
+      width: 100%;
+      margin-left: 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .content {
+      grid-template-rows: 45px 1fr auto;
+      grid-template-columns: 300px;
+  }
+  .left, .right {
+      padding-left: 16px;
+      padding-right: 16px;
+  }
+  .right {
+      padding-top: 40px;
+  }
+  .tagline {
+      flex-flow: row-reverse;
+      justify-content: space-between;
+      margin-bottom: 22px;
+  }
+  .tagline p {
+      text-align: start;
+      width: 210px;
+      transform: translateY(-2px);
+  }
+  .tagline .taglinePic {
+      margin-right: 0;
+      height: 34px;
+  }
+  .tagline svg {
+      width: 34px;
+      height: 34px;
+  }
+  .tabs {
+      margin-bottom: 40px;
+  }
+  .tabs {
+      height: 45px;
+  }
+  .tab {
+      font-size: 17px;
+      width: 100%;
+      padding: 0 15px;
+  }
+  .dish:first-child {
+      margin-right: 11px;
+      margin-bottom: 17px;
+  }
+  .dish:last-child {
+      margin-bottom: 0;
+  }
+  .dish {
+      width: 128px;
+      height: 54px;
+      font-size: 14px;
+      padding: 0 10px;
+      line-height: 1.2em;
+  }
+  .dish.hit::after {
+      top: 0;
+      right: 10px;
+      width: 36px;
+      height: 20px;
+      transform: translateY(-50%);
+      border-radius: 7px;
+      font-size: 12px;
+  }
+  .menuSampleCont {
+      grid-template-rows: auto 1fr auto;
+      grid-template-columns: 100%;
+      grid-template-areas:
+          "text"
+          "pics"
+          "button";
+      margin-bottom: 21px;
+      place-items: center center;
+  }
+  .pics {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: 97px;
+      grid-gap: 16px 15px;
+      padding-top: 23px;
+  }
+  .dishPicCont {
+      width: 126px;
+      height: 97px;
+  }
+  .daySwitch {
+      width: 220px;
+      padding-top: 23px;
+  }
+  .menuSampleCont .daySwitch {
+      place-self: center center;
+  }
+  .nutrition {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      height: 64px;
+      padding: 11px 0;
+      box-sizing: border-box;
+      line-height: 1.2em;
+  }
+  .nutrition .text {
+      font-weight: bolder;
+  }
+  .day,
+  .numDays {
+      width: 128px;
+      height: 54px;
+      font-size: 14px;
+  }
+  .numDays {
+      display: flex;
+      flex-flow: column;
+  }
+  .numDaysSelect {
+      margin-bottom: 36px;
+  }
+  .paymentMethod, .phone {
+      font-size: 16px;
+  }
+  .payment {
+      flex-flow: column;
+      margin-bottom: 34px;
+  }
+  .phone {
+      margin-bottom: 17px;
+      font-size: 16px;
+  }
+  .button {
+      flex-flow: column;
+      align-items: center;
+      justify-content: space-between;
+  }
+  .button button, .orderInfo, .confidential {
+      width: 100%;
+  }
+  .confidential {
+      text-align: center;
+      margin: 20px 0 0 0;
+  }
+}
