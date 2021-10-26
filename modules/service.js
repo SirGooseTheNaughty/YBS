@@ -20,8 +20,8 @@ export async function fetchData () {
             }
             return {
                 menu,
-                day,
-                index,
+                day: Number(day) - 1,
+                index: Number(index) - 1,
                 name: dish.descr,
                 picUrl,
                 text: dish.text,
