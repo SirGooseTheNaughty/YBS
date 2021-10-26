@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YSB new configurator</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="app" class="configurator">
+        <div class="content" :data-tab="tab">
+            <div class="tabs">
+                <tab class="tabHome" title="Домашняя" value="home" :get-is-active="isActive" :set-value="setParameter"></tab>
+                <tab class="tabLite" title="Лайт" value="lite" :get-is-active="isActive" :set-value="setParameter"></tab>
+                <tab class="tabAvan" title="Авангард" value="avan" :get-is-active="isActive" :set-value="setParameter"></tab>
+            </div>
+            <div class="left">
+                <div class="dishesCont">
+                    <tagline :tab="tab"></tagline>
+                    <div class="leftContent">
+                        <div class="numDishes">
+                            <num-dishes title="3 блюда" value="3" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
+                            <num-dishes title="4 блюда" value="4" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
+                            <num-dishes class="hit" title="5 блюд" value="5" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
+                            <num-dishes title="6 блюд" value="6" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
+                        </div>
+                        <div class="menuSampleCont">
+                            <div class="menuSampleText">Пример меню на день</div>
+                            <day-switch :day="day" :set-value="setParameter"></day-switch>
+                            <dishes-example :set-value="setParameter" :dishes="currentDishes"></dishes-example>
+                            <dish-popup :dish-data="dishPopupInfo"></dish-popup>
+                        </div>
+                        <div class="nutritionAndLink">
+                            <div class="nutrition">
+                                <div class="text">КБЖУ</div>
+                                <div class="values">1800-2000 ккал</div>
+                            </div>
+                            <a class="menuLink" href="#home">Подробное меню на неделю</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="question q-days">Когда будете есть?</div>
+                <div class="days">
+                    <days-selection text="Каждый день" value="each" :get-is-active="isActive" :set-value="setParameter"></days-selection>
+                    <days-selection text="По будням" value="work" :get-is-active="isActive" :set-value="setParameter"></days-selection>
+                </div>
+                <div class="question q-numDays">Количество дней</div>
+                <div class="numDaysSelect">
+                    <num-days text="5" subtext="(900 р/день)" value="5" :get-is-active="isActive" :set-value="setParameter"></num-days>
+                    <num-days text="20" subtext="(750 р/день)" value="20" :get-is-active="isActive" :set-value="setParameter"></num-days>
+                </div>
+                <promocode :set-value="setParameter"></promocode>
+                <div class="price">
+                    <div class="priceLabel">Итого:</div>
+                    <div class="priseResults">
+                        <div class="totalPrice">{{ price.textPrice }}</div>
+                        <div class="yourProfit">{{ price.profit }}</div>
+                    </div>
+                </div>
+                <div class="line"></div>
+                <div class="payment">
+                    <payment-method text="Оплата курьеру" value="cash" :get-is-active="isActive" :set-value="setParameter"></payment-method>
+                    <payment-method text="Оплата онлайн" value="card" :get-is-active="isActive" :set-value="setParameter"></payment-method>
+                </div>
+                <phone-input :set-value="setParameter"></phone-input>
+                <div class="button">
+                    <a class="orderInfo" href="" style="pointer-events: none"><button id="order" :class="{ active: phone }">ЗАКАЗАТЬ</button></a>
+                    <p class="confidential">
+                        Оформляя заказ вы соглашаетесь с 
+                        <a href="https://drive.google.com/file/d/1WnK6uXfTHwF56dyzr6fCItt3F9plPNyU/view">политикой конфиденциальности</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <script>
+        let globalApp = true;
+        const projectId = '2857002';
+    </script>
+    
+    <script src="./scripts/dishesInfo.js"></script>
+    <script src="./scripts/jquery.inputmask.min.js"></script>
+    <script type="module" src="./script.js"></script>
+</body>
+</html>
