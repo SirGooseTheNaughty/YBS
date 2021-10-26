@@ -788,6 +788,7 @@ const getMockedData = () => {
         day.forEach((dish, j) => {
             prefomedInfo.push({
                 ...dish,
+                picUrl: tildaPicUrl,
                 menu,
                 day: i,
                 index: j

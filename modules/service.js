@@ -10,11 +10,13 @@ export async function fetchData () {
     .then(res => {
         result = res.products.map(dish => {
             const [ menu, day, index ] = dish.title.split('-');
-            let picUrl = '';
-            try {
-                picUrl = JSON.parse(dish.gallery)[0].img;
-            } catch (e) {
-                console.log(e);
+            let picUrl = tildaPicUrl;
+            if (dish.gallery) {
+                try {
+                    picUrl = JSON.parse(dish.gallery)[0].img;
+                } catch (e) {
+                    console.log(e);
+                }
             }
             return {
                 menu,

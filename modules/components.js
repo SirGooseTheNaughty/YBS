@@ -2,13 +2,6 @@ import { taglinePics, daySwitchArrow, promocodePics, popupIcon } from './svgs.js
 import { taglineTexts, daysTexts, promoResultsTexts } from "./data.js";
 import { getPromocodeResults } from './service.js';
 
-let confLink = '#';
-try {
-    confLink = confidentialLink;
-} catch(e) {
-    console.log(e);
-}
-
 const activityParams = (param) => ({
     computed: {
         isActive: function() {
@@ -111,7 +104,7 @@ export const dishExampleComp = {
         </div>
     `,
     computed: {
-        picUrl: function() { return this.dishData.picUrl || window.location.toString() + '/../assets/1.png'; }
+        picUrl: function() { return this.dishData.picUrl; }
     },
     methods: {
         showPopup: function(e) {
