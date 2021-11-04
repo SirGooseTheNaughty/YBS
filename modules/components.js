@@ -329,6 +329,7 @@ export const promocodeInputComp = {
                 this.setValue('promocodeResults', 'ready', 'status');
                 this.setValue('promocodeResults', null, 'type');
                 this.setValue('promocodeResults', null, 'discount');
+                this.setValue('promocodeResults', null, 'promocode');
             }
         },
         enterPromocode: async function () {
@@ -338,6 +339,11 @@ export const promocodeInputComp = {
             this.setValue('promocodeResults', promoRes.status, 'status');
             this.setValue('promocodeResults', promoRes.type, 'type');
             this.setValue('promocodeResults', promoRes.discount, 'discount');
+            if (promoRes.status === 'ok') {
+                this.setValue('promocodeResults', this.promocode, 'promocode');
+            } else {
+                this.setValue('promocodeResults', null, 'promocode');
+            }
         },
     },
     computed: {

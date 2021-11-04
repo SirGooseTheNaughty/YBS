@@ -15,8 +15,8 @@ export const appComp = {
             day: 0,
             daysSelection: 'work',
             numDays: '20',
-            promocode: '',
             promocodeResults: {
+                promocode: '',
                 status: 'ready',
                 type: null,
                 discount: null
