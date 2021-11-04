@@ -210,9 +210,6 @@ p {
   margin-bottom: 30px;
   cursor: pointer;
 }
-.dessert.hidden {
-  display: none;
-}
 .dessert p {
   margin-right: 10px;
   color: var(--darkColor);

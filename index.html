@@ -25,11 +25,11 @@
                             <num-dishes class="hit" title="5 блюд" value="5" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
                             <num-dishes title="6 блюд" value="6" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
                         </div>
-                        <dessert :set-value="setParameter" :is-added="addDessert" :tab="tab"></dessert>
+                        <dessert :set-value="setParameter" :is-added="isDessertAdded"></dessert>
                         <div class="menuSampleCont">
                             <div class="menuSampleText">Пример меню на день</div>
                             <day-switch :day="day" :set-value="setParameter"></day-switch>
-                            <dishes-example :set-value="setParameter" :dishes="currentDishes"></dishes-example>
+                            <dishes-example :set-value="setParameter" :dishes="currentDishes" :x="dishesX"></dishes-example>
                             <dish-popup :dish-data="dishPopupInfo"></dish-popup>
                         </div>
                         <div class="nutritionAndLink">
@@ -103,6 +103,7 @@
             lite: '#tilda-lite',
             avan: '#tilda-avan',
         };
+        const basketId = '';
     </script>
     
     <script src="./scripts/dishesInfo.js"></script>

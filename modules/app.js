@@ -1,7 +1,7 @@
 // import { fetchQuestions, preformResults, fetchResults } from './functions.js';
 // import { loadCookies, saveCookies, unloadListener, showResults } from './utils.js';
 // import { colorSchemes } from "./data.js";
-import { fetchData } from './service.js';
+import { fetchData, connectBasket, checkout } from './service.js';
 import { pricesData } from './prices.js';
 import { dict } from './data.js';
 
@@ -11,7 +11,7 @@ export const appComp = {
         return {
             tab: 'home',    // home / lite / avan
             numDishes: '5',
-            addDessert: false,
+            isDessertAdded: false,
             day: 0,
             daysSelection: 'work',
             numDays: '20',
@@ -33,13 +33,20 @@ export const appComp = {
                 x: 0,
                 y: 0
             },
-            menuLinks: {home: '#home', lite: '#lite', avan: '#avan'}
+            menuLinks: {home: '#home', lite: '#lite', avan: '#avan'},
+            dishesX: 0,
+            basket: { selector: '', price: null, phone: null, cashBtn: null, cardBtn: null, productsCont: null, promoInput: null, promoBtn: null, submitBtn: null }
         }
     },
     async mounted() {
         const dishesData = await fetchData();
         this.dishesData = dishesData.length ? dishesData : getMockedData();
         console.log(this.dishesData);
+    },
+    watch: {
+        numDishes: function() {
+            this.dishesX = 0;
+        }
     },
     methods: {
         setParameter: function(parameter, value, subParameter = null) {
@@ -69,18 +76,21 @@ export const appComp = {
         },
         deleteConfig: function(index) {
             this.savedConfigs.splice(index, 1);
-        }
+        },
+        connectBasket: function() {
+            connectBasket(this);
+        },
+        checkout: function() {
+            checkout(this);
+        },
     },
     computed: {
-        isDessertAdded: function() {
-            return this.addDessert && this.tab !== 'lite';
-        },
         currentDishes: function() {
             const dayDishes = this.dishesData.filter(dish => {
                 return dish.menu === this.tab && dish.day == this.day;
             });
             const dishes = dayDishes.slice(0, Number(this.numDishes));
-            if (this.isDessertAdded && this.tab !== 'lite') {
+            if (this.isDessertAdded) {
                 dishes.push(dayDishes.find(dish => dish.index === 'dessert'));
             }
             return dishes;

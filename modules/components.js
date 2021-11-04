@@ -1,6 +1,7 @@
 import { taglinePics, daySwitchArrow, promocodePics, popupIcon, dessertPlus, dishExampleArrow, preCartItemCross, preCardPlus } from './svgs.js';
 import { taglineTexts, daysTexts, promoResultsTexts, dessertLines, dict } from "./data.js";
 import { getPromocodeResults } from './service.js';
+import { nutritionValues } from './nutritionData.js';
 
 const activityParams = (param) => ({
     computed: {
@@ -50,24 +51,21 @@ export const numDishesComp = {
 }
 
 export const dessertComp = {
-    props: ['set-value', 'is-added', 'tab'],
+    props: ['set-value', 'is-added'],
     template: `
-        <div class="dessert" :class="{ hidden: isHidden, added: isAdded }" v-on:click="toggle">
+        <div class="dessert" :class="{ added: isAdded }" v-on:click="toggle">
             <p>{{ text }}</p>
             <div class="dessert__plus">${dessertPlus}</div>
         </div>
     `,
     computed: {
-        isHidden: function() {
-            return this.tab === 'lite';
-        },
         text: function() {
             return this.isAdded ? dessertLines.remove : dessertLines.add;
         }
     },
     methods: {
         toggle: function() {
-            this.setValue('addDessert', !this.isAdded);
+            this.setValue('isDessertAdded', !this.isAdded);
         }
     }
 }
@@ -133,12 +131,12 @@ export const dishExampleComp = {
 }
 
 export const dishesExapmleComp = {
-    props: ['set-value', 'dishes'],
+    props: ['set-value', 'dishes', 'x'],
     data() {
         return {
-            x: 0,
             onBorder: 'left',
-            isDrag: false
+            isDrag: false,
+            maxShift: 0
         }
     },
     template: `
@@ -162,20 +160,22 @@ export const dishesExapmleComp = {
             <div class="dishExampleArrow dishExampleArrow-right" :class="{ hidden: isOnRight }" v-on:click="moveRight">${dishExampleArrow}</div>
         </div>
     `,
+    updated: function() {
+        const allElements = this.$refs.cont.querySelectorAll('.dishPicCont');
+        if (allElements.length) {
+            const lastElement = allElements[allElements.length - 1];
+            this.maxShift = lastElement.offsetLeft + lastElement.offsetWidth - this.$refs.cont.offsetWidth;
+        }
+    },
     computed: {
         isOnLeft: function() {
-            return this.onBorder === 'left';
+            return this.onBorder === 'left' || this.x === 0;
         },
         isOnRight: function() {
-            return this.onBorder === 'right';
+            return this.onBorder === 'right' && this.x !== 0;
         },
         transformation: function() {
             return { transform: `translateX(${this.x}px)` };
-        },
-        maxShift: function() {
-            const allElements = this.$refs.cont.querySelectorAll('.dishPicCont');
-            const lastElement = allElements[allElements.length - 1];
-            return lastElement.offsetLeft + lastElement.offsetWidth - this.$refs.cont.offsetWidth;
         },
         dishElementWidth: function() {
             const elem = this.$refs.cont.querySelector('.dishPicCont');
@@ -185,16 +185,17 @@ export const dishesExapmleComp = {
     methods: {
         move: function(e) {
             if (this.isDrag) {
-                this.x += e.movementX;
-                if (this.x > 0) {
-                    this.x = 0;
+                let newX = this.x + e.movementX;
+                if (newX > 0) {
+                    newX = 0;
                     this.onBorder = 'left';
-                } else if (Math.abs(this.x) > this.maxShift) {
-                    this.x = -this.maxShift;
+                } else if (Math.abs(newX) > this.maxShift) {
+                    newX = -this.maxShift;
                     this.onBorder = 'right';
                 } else {
                     this.onBorder = null;
                 }
+                this.setValue('dishesX', newX);
             }
         },
         addListener: function() {
@@ -204,22 +205,24 @@ export const dishesExapmleComp = {
             this.isDrag = false;
         },
         moveLeft: function() {
-            this.x += this.dishElementWidth;
-            if (this.x > 0) {
-                this.x = 0;
+            let newX = this.x + this.dishElementWidth;
+            if (newX > 0) {
+                newX = 0;
                 this.onBorder = 'left';
             } else {
                 this.onBorder = null;
             }
+            this.setValue('dishesX', newX);
         },
         moveRight: function() {
-            this.x -= this.dishElementWidth;
-            if (Math.abs(this.x) > this.maxShift) {
-                this.x = -this.maxShift;
+            let newX = this.x - this.dishElementWidth;
+            if (Math.abs(newX) > this.maxShift) {
+                newX = -this.maxShift;
                 this.onBorder = 'right';
             } else {
                 this.onBorder = null;
             }
+            this.setValue('dishesX', newX);
         }
     }
 }
@@ -250,13 +253,26 @@ export const nutritionComp = {
     `,
     computed: {
         nutritionText: function() {
-            const values = {ccal: 0, prot: 0, fat: 0, carb: 0 };
-            this.dishes.forEach(dish => {
-                Object.keys(values).forEach(key => {
-                    values[key] += Number(dish.characteristics[key]);
-                })
-            });
-            return `${values.ccal} ккал / Б: ${values.prot} / Ж: ${values.fat} / У: ${values.carb}`;
+            const dayData = nutritionValues[this.tab][this.numDishes][this.day];
+            let [ccal, prot, fat, carb] = dayData.split('/');
+            if (this.isDessertAdded) {
+                const dessertData = nutritionValues[this.tab].desserts[this.day];
+                const [dccal, dprot, dfat, dcarb] = dessertData.split('/');
+                ccal = Number(ccal) + Number(dccal);
+                prot = Number(prot) + Number(dprot);
+                fat = Number(fat) + Number(dfat);
+                carb = Number(carb) + Number(dcarb);
+            }
+            return `${ccal} ккал / Б: ${prot} / Ж: ${fat} / У: ${carb}`;
+            
+            //  ЕСЛИ КОГДА-ТО ЗНАЧЕНИЯ БУДУТ В ИНФЕ О БЛЮДАХ
+            // const values = {ccal: 0, prot: 0, fat: 0, carb: 0 };
+            // this.dishes.forEach(dish => {
+            //     Object.keys(values).forEach(key => {
+            //         values[key] += Number(dish.characteristics[key]);
+            //     })
+            // });
+            // return `${values.ccal} ккал / Б: ${values.prot} / Ж: ${values.fat} / У: ${values.carb}`;
         }
     }
 }

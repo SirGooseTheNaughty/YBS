@@ -72,3 +72,43 @@ export async function getPromocodeResults (promocode) {
         }
     return promoResult;
 }
+
+export function connectBasket(context) {
+    console.log('try');
+    let basket = null;
+    try {
+        basket = document.querySelector(context.basket.selector);
+    } catch(e) {
+        return console.error('Basket can not be connected', e);
+    }
+    if (!basket) {
+        return setTimeout(() => connectBasket(context), 500);
+    }
+    context.basket.price = basket.querySelector('.t706__cartwin-prodamount');
+    context.basket.phone = basket.querySelector('input[name="phone"]');
+    context.basket.cashBtn = basket.querySelector('[name="paymentsystem"][value="cash"]');
+    context.basket.cardBtn = basket.querySelector('[name="paymentsystem"][value="tinkoff"]');
+    context.basket.submitBtn = basket.querySelector('.t-submit');
+    context.basket.productsCont = basket.querySelector('.t706__cartwin-products');
+    context.basket.promoInput = basket.querySelector('.t-inputpromocode');
+    context.basket.promoBtn = basket.querySelector('.t-inputpromocode__btn');
+}
+
+export function checkout (context) {
+    const { tab, payment, phone, price, promocode, promocodeResults: { discount } } = context;
+    context.basket.price.innerHTML = '' + price;
+    context.basket.phone.value = phone;
+    if (discount) {
+        context.basket.promoInput.value = promocode;
+        context.basket.promoBtn.click();
+    }
+    if (payment === 'card' && tab !== 'avan') {     // т.к. авангард больше не оплачивается
+        context.basket.cardBtn.click();
+    } else {
+        context.basket.cashBtn.click();
+    }
+    setTimeout(() => {
+        FBpixel.trackPurchase();
+        context.basket.submitBtn.click();
+    }, 500);
+}

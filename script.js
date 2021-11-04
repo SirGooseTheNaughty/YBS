@@ -45,6 +45,12 @@ try {
     }
 } catch (e) {};
 try {
+    globalApp.setParameter('basket', basketId, 'selector');
+    globalApp.connectBasket();
+} catch(e) {
+    console.error('Не задан селектор корзины');
+}
+try {
     if (tildaMenuLinks) {
         globalApp.setParameter('menuLinks', tildaMenuLinks.home, 'home');
         globalApp.setParameter('menuLinks', tildaMenuLinks.lite, 'lite');
