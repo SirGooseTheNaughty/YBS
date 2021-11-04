@@ -29,7 +29,7 @@ export const appComp = {
                 isShown: false,
                 name: '',
                 weight: 0,
-                ing: '',
+                text: '',
                 x: 0,
                 y: 0
             },

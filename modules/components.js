@@ -1,7 +1,6 @@
 import { taglinePics, daySwitchArrow, promocodePics, popupIcon, dessertPlus, dishExampleArrow, preCartItemCross, preCardPlus } from './svgs.js';
 import { taglineTexts, daysTexts, promoResultsTexts, dessertLines, dict } from "./data.js";
 import { getPromocodeResults } from './service.js';
-import { nutritionValues } from './nutritionData.js';
 
 const activityParams = (param) => ({
     computed: {
@@ -108,22 +107,7 @@ export const dishExampleComp = {
     props: ['set-value', 'dish-data'],
     template: `
         <div class="dishPicCont">
-            <svg
-                class="dishPopup__icon"
-                width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                v-on:mouseenter="showPopup"
-                v-on:mouseleave="hidePopup"
-                v-on:click="showPopup"
-            >
-                <circle cx="8" cy="8" r="8" fill="#FFF7EC" fill-opacity="0.6"/>
-                <path d="M7.51053 9.672C7.43053 9.672 7.36253 9.644 7.30653 9.588C7.25053 9.532 7.22253 9.464 7.22253 9.384V3.888C7.22253 
-                3.808 7.25053 3.74 7.30653 3.684C7.36253 3.628 7.43053 3.6 7.51053 3.6H8.48253C8.57053 3.6 8.63853 3.628 8.68653 3.684C8.74253 
-                3.732 8.77053 3.8 8.77053 3.888V9.384C8.77053 9.464 8.74253 9.532 8.68653 9.588C8.63853 9.644 8.57053 9.672 8.48253 
-                9.672H7.51053ZM7.43853 12C7.35853 12 7.29053 11.972 7.23453 11.916C7.17853 11.86 7.15053 11.792 7.15053 11.712V10.596C7.15053 
-                10.508 7.17853 10.436 7.23453 10.38C7.29053 10.324 7.35853 10.296 7.43853 10.296H8.55453C8.64253 10.296 8.71453 10.324 8.77053 
-                10.38C8.82653 10.436 8.85453 10.508 8.85453 10.596V11.712C8.85453 11.792 8.82653 11.86 8.77053 11.916C8.71453 11.972 8.64253 
-                12 8.55453 12H7.43853Z" fill="white"/>
-            </svg>
+            <div  v-on:mouseenter="showPopup" v-on:mouseleave="hidePopup" v-on:click="showPopup">${popupIcon}</div>
             <img
                 :src="picUrl"
                 alt="dish example"
@@ -139,7 +123,7 @@ export const dishExampleComp = {
             const { x, y, width, height } = e.target.getBoundingClientRect();
             this.setValue('dishPopupInfo', this.dishData.name, 'name');
             this.setValue('dishPopupInfo', this.dishData.weight, 'weight');
-            this.setValue('dishPopupInfo', this.dishData.ing, 'ing');
+            this.setValue('dishPopupInfo', this.dishData.text, 'text');
             this.setValue('dishPopupInfo', x + width, 'x');
             this.setValue('dishPopupInfo', y + height, 'y');
             this.setValue('dishPopupInfo', true, 'isShown');
@@ -246,7 +230,7 @@ export const dishExamplePopup = {
         <div class="dishPopup" :class="{ hidden: !dishData.isShown }" :style="getStyle">
             <div class="dishPopup__title">{{ dishData.name }}</div>
             <div class="dishPopup__weight">Вес: <span class="dishPopup__weightValue">{{ dishData.weight }} г</span></div>
-            <div class="dishPopup__ing">Состав: <span class="dishPopup__ingValue">{{ dishData.ing }}</span></div>
+            <div class="dishPopup__ing">Состав: <span class="dishPopup__ingValue">{{ dishData.text }}</span></div>
         </div>
     `,
     computed: {
@@ -257,7 +241,7 @@ export const dishExamplePopup = {
 }
 
 export const nutritionComp = {
-    props: ['tab', 'num-dishes', 'day', 'is-dessert-added'],
+    props: ['tab', 'num-dishes', 'day', 'is-dessert-added', 'dishes'],
     template: `
         <div class="nutrition">
             <div class="text">КБЖУ</div>
@@ -266,13 +250,13 @@ export const nutritionComp = {
     `,
     computed: {
         nutritionText: function() {
-            const data = nutritionValues[this.tab][this.numDishes][this.day];
-            let [ ccal, prot, fat, carb] = data.split('/');
-            if (this.isDessertAdded) {
-                const dessertsData = nutritionValues[this.tab].desserts;
-                const dessertData = dessertsData ? dessertsData[this.day] : null;
-            }
-            return `${ccal} ккал / Б: ${prot} / Ж: ${fat} / У: ${carb}`;
+            const values = {ccal: 0, prot: 0, fat: 0, carb: 0 };
+            this.dishes.forEach(dish => {
+                Object.keys(values).forEach(key => {
+                    values[key] += Number(dish.characteristics[key]);
+                })
+            });
+            return `${values.ccal} ккал / Б: ${values.prot} / Ж: ${values.fat} / У: ${values.carb}`;
         }
     }
 }
