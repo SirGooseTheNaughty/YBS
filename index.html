@@ -53,8 +53,8 @@
                 </div>
                 <div class="question q-numDays">Количество дней</div>
                 <div class="numDaysSelect">
-                    <num-days text="5" subtext="(900 р/день)" value="5" :get-is-active="isActive" :set-value="setParameter"></num-days>
-                    <num-days text="20" subtext="(750 р/день)" value="20" :get-is-active="isActive" :set-value="setParameter"></num-days>
+                    <num-days value="5" :tab="tab" :num-dishes="numDishes" :days-selection="daysSelection" :get-is-active="isActive" :set-value="setParameter"></num-days>
+                    <num-days value="20" :tab="tab" :num-dishes="numDishes" :days-selection="daysSelection" :get-is-active="isActive" :set-value="setParameter"></num-days>
                 </div>
                 <promocode :set-value="setParameter" :promocode-results="promocodeResults" :saved-configs="savedConfigs"></promocode>
                 <pre-cart

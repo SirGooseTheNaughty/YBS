@@ -1,5 +1,6 @@
 import { taglinePics, daySwitchArrow, promocodePics, popupIcon, dessertPlus, dishExampleArrow, preCartItemCross, preCardPlus } from './svgs.js';
 import { taglineTexts, daysTexts, promoResultsTexts, dessertLines, dict } from "./data.js";
+import { pricesData } from './prices.js';
 import { getPromocodeResults } from './service.js';
 import { nutritionValues } from './nutritionData.js';
 
@@ -286,14 +287,36 @@ export const daysSelectionComp = {
 }
 
 export const numDaysComp = {
-    props: ['text', 'subtext', 'value', 'get-is-active', 'set-value'],
+    props: ['value', 'tab', 'num-dishes', 'days-selection', 'get-is-active', 'set-value'],
     template: `
         <div class="numDays" :class="{ active: isActive }" v-on:click="onClick">
-            <span class="numDay">{{ text }}</span>
+            <span class="numDay">{{ numDays }}</span>
             <span class="dayPrice">{{ subtext }}</span>
         </div>
     `,
-    ...activityParams('numDays')
+    computed: {
+        isActive: function() {
+            return this.getIsActive('numDays', this.value);
+        },
+        numDays: function() {
+            if (this.value == 5) {
+                return this.daysSelection === 'work' ? 5 : 7;
+            }
+            return this.daysSelection === 'work' ? 20 : 28;
+        },
+        subtext: function() {
+            return `(${this.getOneDayPrice(this.numDays)} р/день)`;
+        }
+    },
+    methods: {
+        onClick: function() {
+            this.setValue('numDays', this.value);
+        },
+        getOneDayPrice: function(days) {
+            const price = pricesData[this.tab][this.numDishes][this.daysSelection][this.value]
+            return Math.floor((Number(price) / days));
+        }
+    }
 }
 
 export const promocodeInputComp = {
