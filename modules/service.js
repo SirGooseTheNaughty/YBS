@@ -107,9 +107,9 @@ export function checkout (context) {
     } else {
         context.basket.cashBtn.click();
     }
-    if (!context.preventOrder) {
+    if (!context.basket.preventOrder) {
         setTimeout(() => {
-            FBpixel.trackPurchase();
+            // FBpixel.trackPurchase();
             context.basket.submitBtn.click();
         }, 500);
     }
