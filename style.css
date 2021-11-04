@@ -2,28 +2,37 @@
 
 :root {
   --fontBlack: #333333;
-  --fontWhite: #F2F2F2;
+  --fontWhite: #f2f2f2;
   --fontGray: #828282;
-  --fontGray2: #4F4F4F;
+  --fontGray2: #4f4f4f;
 
-  --homeColor: #F5D5B5;
-  --liteColor: #DCE7C1 ;
-  --avanColor: #D5D0DC;
+  --homeColor: #f5d5b5;
+  --liteColor: #dce7c1;
+  --avanColor: #d5d0dc;
 
-  --orderBtnColor: #F08D46;
-  --orderBtnDisactive: #CDCDCD;
+  --whiteBG: #F3EDE5;
 
-  --promocodeBg: #F3EDE5;
-  --promoPicBg__enter: #F08D46;
-  --promoPicBg__ok: #B0CB6C;
-  --promoPicBg__bad: #DF5951;
+  --orderBtnColor: #f08d46;
+  --orderBtnDisactive: #cdcdcd;
+
+  --promocodeBg: #f3ede5;
+  --promoPicBg__enter: #f08d46;
+  --promoPicBg__ok: #b0cb6c;
+  --promoPicBg__bad: #df5951;
+
+  --animation-time: 0.4s;
+  --animation-time-short: 0.2s;
+}
+
+p {
+  margin: 0;
 }
 
 /* main */
 .configurator {
   width: max-content;
   margin: 0 auto;
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   user-select: none;
 }
 .configurator a {
@@ -34,32 +43,32 @@
   grid-template-rows: 61px 670px auto;
   grid-template-columns: 660px 500px;
   grid-template-areas:
-      "tabs ."
-      "left right"
-      ". right";
+    "tabs ."
+    "left right"
+    ". right";
   color: var(--fontBlack);
   font-size: 18px;
 }
 [data-tab="home"] {
-  --lighterColor: #FFF7EC;
-  --mainColor: #F5D5B5 ;
-  --darkerColor: #F9E1C3;
-  --darkColor: #F08D46;
-  --nutritionColor: #EBAE70;
+  --lighterColor: #fff7ec;
+  --mainColor: #f5d5b5;
+  --darkerColor: #f9e1c3;
+  --darkColor: #f08d46;
+  --nutritionColor: #ebae70;
 }
 [data-tab="lite"] {
-  --lighterColor: #F0F4E5;
-  --mainColor: #DCE7C1 ;
-  --darkerColor: #C5D699;
-  --darkColor: #B0CB6C;
-  --nutritionColor: #BAD084;
+  --lighterColor: #f0f4e5;
+  --mainColor: #dce7c1;
+  --darkerColor: #c5d699;
+  --darkColor: #b0cb6c;
+  --nutritionColor: #bad084;
 }
 [data-tab="avan"] {
-  --lighterColor: #F2F2F2;
-  --mainColor: #D5D0DC ;
-  --darkerColor: #ACA7B5;
-  --darkColor: #8D839C;
-  --nutritionColor: #9791A0;
+  --lighterColor: #f2f2f2;
+  --mainColor: #d5d0dc;
+  --darkerColor: #aca7b5;
+  --darkColor: #8d839c;
+  --nutritionColor: #9791a0;
 }
 
 /* segments */
@@ -74,6 +83,7 @@
   grid-area: left;
   border-bottom-left-radius: 15px;
   padding: 41px 48px 18px 48px;
+  transition: background-color var(--animation-time-short) ease;
 }
 .right {
   background-color: var(--lighterColor);
@@ -81,6 +91,7 @@
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   padding: 63px 51px 64px 51px;
+  transition: background-color var(--animation-time-short) ease;
 }
 
 /* tabs */
@@ -92,7 +103,7 @@
   place-items: center;
   color: white;
   font-size: 24px;
-  transition: height 0.4s ease;
+  transition: height var(--animation-time) ease;
   cursor: pointer;
 }
 .tab.active {
@@ -128,31 +139,33 @@
 }
 .leftContent {
   display: grid;
+  grid-template-columns: 100%;
   grid-template-rows: repeat(4, auto);
-  grid-template-areas: 
-      "first"
-      "second"
-      "third";
+  grid-template-areas:
+    "first"
+    "second"
+    "third";
 }
 .numDishes {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 35px;
+  margin-bottom: 27px;
 }
 .dish {
   position: relative;
   width: 100%;
-  height: 83px;
+  height: 51px;
   background-color: var(--lighterColor);
   border-radius: 15px;
   display: grid;
   place-items: center;
   text-align: center;
-  line-height: .9em;
+  line-height: 0.9em;
   padding: 0 28px;
   box-sizing: border-box;
   cursor: pointer;
   margin-right: 20px;
+  transition: background-color var(--animation-time-short), color var(--animation-time-short);
 }
 .dish:last-child {
   margin-right: 0;
@@ -165,7 +178,7 @@
   color: var(--fontWhite);
 }
 .dish.hit::after {
-  content: 'HIT';
+  content: "HIT";
   position: absolute;
   top: 0;
   right: 13px;
@@ -178,6 +191,7 @@
   background-color: var(--darkColor);
   display: grid;
   place-items: center;
+  transition: background-color var(--animation-time-short), color var(--animation-time-short);
 }
 .dish.active.hit::after {
   background-color: var(--lighterColor);
@@ -186,14 +200,47 @@
 [data-tab="lite"] .dish:nth-child(2n) {
   display: none;
 }
+.dessert {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed var(--darkColor);
+  border-radius: 30px;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+.dessert.hidden {
+  display: none;
+}
+.dessert p {
+  margin-right: 10px;
+  color: var(--darkColor);
+}
+.dessert .dessert__plus {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background-color: var(--whiteBG);
+  transition: var(--animation-time-short);
+}
+.dessert.added .dessert__plus {
+  transform: rotate(45deg);
+}
+.dessert .dessert__plus path {
+  stroke: var(--darkColor);
+}
 .menuSampleCont {
   display: grid;
   place-items: center baseline;
   grid-template-columns: 50% 50%;
   grid-template-rows: 35px 1fr;
   grid-template-areas:
-      "text button"
-      "pics pics";
+    "text button"
+    "pics pics";
   margin-bottom: 21px;
 }
 .menuSampleCont .menuSampleText {
@@ -202,7 +249,7 @@
 .menuSampleCont .daySwitch {
   grid-area: button;
 }
-.menuSampleCont .pics {
+.menuSampleCont .pics__container {
   grid-area: pics;
 }
 .nutrition {
@@ -214,7 +261,7 @@
 .daySwitch {
   place-self: end;
   display: flex;
-  width: 220px;
+  width: 200px;
   justify-content: space-between;
   align-items: center;
 }
@@ -222,46 +269,107 @@
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  background-color: var(--lighterColor);
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  transition: var(--animation-time-short);
+}
+.daySwitch .button path {
+  stroke: var(--darkColor);
 }
 .daySwitch .prev {
   transform: rotate(180deg);
 }
-.pics {
-  place-self: baseline;
+.daySwitch .day-short {
+  display: none;
+}
+.pics__container {
   width: 100%;
+  position: relative;
+}
+.pics__container::before,
+.pics__container::after {
+  content: "";
+  z-index: 1;
+  pointer-events: none;
+  width: 10%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  transition: var(--animation-time);
+}
+.pics__container::before {
+  left: -15px;
+  background: linear-gradient(to right, var(--mainColor) 30%, rgba(0, 0, 0, 0) 100%);
+}
+.pics__container::after {
+  right: -15px;
+  background: linear-gradient(to left, var(--mainColor) 30%, rgba(0, 0, 0, 0) 100%);
+}
+.pics__container.onLeft::before {
+  opacity: 0;
+}
+.pics__container.onRight::after {
+  opacity: 0;
+}
+.pics__container > div {
+  overflow-x: hidden;
+}
+.dishExampleArrow {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--whiteBG);
   display: grid;
-  place-items: end;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 121px);
-  grid-gap: 20px 32px;
+  place-items: center;
+  cursor: pointer;
+  transition: background-color var(--animation-time-short), opacity var(--animation-time-short);
+}
+.dishExampleArrow.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.dishExampleArrow path {
+  stroke: var(--darkColor);
+}
+.dishExampleArrow-left {
+  transform: translate(-25%, -25%) rotate(180deg);
+}
+.dishExampleArrow-right {
+  right: 0;
+  transform: translate(25%, -25%);
+}
+.pics {
+  display: flex;
+  column-gap: 18px;
   padding-top: 20px;
-  transform: scale(1.02);
   box-sizing: border-box;
+  cursor: grab;
+}
+.pics.smooth {
+  transition: transform var(--animation-time) ease;
+}
+.pics:not(.smooth):active {
+  cursor: grabbing;
 }
 .pic {
-  max-width: 100%;
-  max-height: 100%;
+  min-width: 213px;
+  height: 160px;
   user-select: none;
+  pointer-events: none;
 }
 .dishPicCont {
-  width: 163px;
-  height: 121px;
   position: relative;
 }
 .dishPopup__icon {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  opacity: 0;
+  top: 22px;
+  right: 22px;
   cursor: pointer;
-}
-.dishPicCont:hover .dishPopup__icon {
-  opacity: 1;
 }
 .dishPopup {
   position: absolute;
@@ -295,7 +403,7 @@
   color: var(--fontGray2);
   font-weight: 400;
 }
-.hidden {
+.dishPopup.hidden {
   opacity: 0;
   pointer-events: none;
 }
@@ -334,9 +442,10 @@
   justify-content: center;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color var(--animation-time-short) ease, color var(--animation-time-short) ease;
 }
 .numDay {
-  margin-right: .3em;
+  margin-right: 0.3em;
   font-weight: bold;
 }
 .dayPrice {
@@ -396,7 +505,7 @@
   margin-right: 40px;
 }
 .paymentMethod::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -405,8 +514,8 @@
   border-radius: 50%;
   background-color: var(--mainColor);
 }
-.paymentMethod.checked::after {
-  content: '';
+.paymentMethod::after {
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -415,6 +524,11 @@
   height: 12px;
   border-radius: 50%;
   background-color: var(--darkColor);
+  opacity: 0;
+  transition: var(--animation-time-short);
+}
+.paymentMethod.checked::after {
+  opacity: 1;
 }
 /* checkout */
 .phone,
@@ -463,17 +577,52 @@
   margin-top: 8px;
   font-size: 12px;
   text-align: center;
+  color: var(--promoPicBg__ok);
 }
-.promo.enter .promo__status {
+.promo.enter .promo__status:empty {
   opacity: 0;
 }
 .promo.ok .promo__status {
   color: var(--promoPicBg__ok);
-  opacity: 1;
 }
 .promo.bad .promo__status {
   color: var(--promoPicBg__bad);
-  opacity: 1;
+}
+.pre-cart {
+  font-size: 13px;
+}
+.pre-cart__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 7px 0;
+}
+.pre-cart__item .cross {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: var(--animation-time-short);
+}
+.pre-cart__add {
+  display: flex;
+  align-items: center;
+  margin-top: 18px;
+  margin-bottom: 22px;
+  cursor: pointer;
+}
+.pre-cart__add .plus {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: var(--darkColor);
+  margin-right: 10px;
+  transition: var(--animation-time-short);
 }
 .button {
   display: flex;
@@ -513,431 +662,491 @@
 
 @media screen and (min-width: 1200px) {
   .dish:not(.active):hover {
-      background-color: var(--darkerColor);
+    background-color: var(--darkerColor);
   }
   .daySwitch .button:hover {
-      background-color: var(--darkerColor);
+    background-color: var(--darkerColor);
+  }
+  .dessert:hover .dessert__plus {
+    background-color: var(--darkColor);
+  }
+  .dessert:hover .dessert__plus path {
+    stroke: var(--fontWhite);
+  }
+  .dishExampleArrow:hover {
+    background-color: var(--darkerColor);
+  }
+  .pre-cart__item .cross:hover {
+    background-color: var(--darkerColor);
+  }
+  .pre-cart__add:hover .plus {
+    background-color: var(--darkerColor);
+  }
+  .pre-cart__add:hover .plus path {
+    stroke: var(--darkColor);
   }
 }
 
 @media screen and (max-width: 1200px) {
   .content {
-      grid-template-rows: 61px 685px;
-      grid-template-columns: 540px 400px;
+    grid-template-rows: 61px 685px;
+    grid-template-columns: 540px 400px;
   }
-  .left, .right {
-      padding-left: 45px;
-      padding-right: 45px;
+  .left,
+  .right {
+    padding-left: 45px;
+    padding-right: 45px;
   }
   .right {
-      background-color: var(--lighterColor);
-      grid-area: right;
-      border-bottom-right-radius: 15px;
-      border-top-right-radius: 15px;
-      padding: 43px 60px 0 42px;
+    background-color: var(--lighterColor);
+    grid-area: right;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 43px 60px 0 42px;
   }
   .tagline {
-      margin-bottom: 36px;
+    margin-bottom: 36px;
   }
   .tagline p {
-      font-size: 18px;
-      transform: translateY(3px); 
+    font-size: 18px;
+    transform: translateY(3px);
   }
   .tagline .taglinePic {
-      margin-right: 18px;
+    margin-right: 18px;
   }
   .tagline svg {
-      width: 30px;
-      height: 30px;
+    width: 30px;
+    height: 30px;
   }
   .tab {
-      font-size: 20px;
+    font-size: 20px;
   }
   .numDishes {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin-bottom: 35px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 21px;
   }
   .dish {
-      width: 214px;
-      height: 60px;
-      padding: 0;
-      margin: 0;
+    width: 214px;
+    height: 60px;
+    padding: 0;
+    margin: 0;
   }
   .dish:first-child {
-      margin-right: 17px;
-      margin-bottom: 21px;
+    margin-right: 17px;
+    margin-bottom: 21px;
   }
-  .content[data-active-tab='lite'] .dish:first-child {
-      margin-bottom: 0;
+  .dessert {
+    margin-bottom: 44px;
+  }
+  .content[data-active-tab="lite"] .dish:first-child {
+    margin-bottom: 0;
   }
   .daySwitch {
-      width: 120px;
+    width: 120px;
+  }
+  .daySwitch .day-full {
+    display: none;
+  }
+  .daySwitch .day-short {
+    display: block;
   }
   .menuSampleCont {
-      grid-template-rows: 35px 1fr;
-      margin-bottom: 36px;
+    grid-template-rows: 35px 1fr;
+    margin-bottom: 36px;
   }
   .pics {
-      grid-template-rows: repeat(2, 101px);
-      grid-gap: 21px 21px;
-      padding-top: 16px;
+    grid-template-rows: repeat(2, 101px);
+    grid-gap: 21px 21px;
+    padding-top: 16px;
   }
   .dishPopup__icon {
-      opacity: 1;
+    opacity: 1;
   }
   .dishPicCont {
-      width: 134px;
-      height: 101px;
+    width: 134px;
+    height: 101px;
   }
   .days {
-      margin-bottom: 32px;
+    margin-bottom: 32px;
   }
   .numDaysSelect {
-      margin-bottom: 26px;
+    margin-bottom: 26px;
   }
   .day,
   .numDays {
-      width: 144px;
+    width: 144px;
   }
   .price {
-      margin-bottom: 21px;
+    margin-bottom: 21px;
   }
   .payment {
-      flex-flow: column;
-      margin-bottom: 34px;
+    flex-flow: column;
+    margin-bottom: 34px;
   }
   .paymentMethod:first-child {
-      margin-bottom: 15px;
+    margin-bottom: 15px;
   }
   .phone {
-      margin-bottom: 26px;
+    margin-bottom: 26px;
   }
   .button {
-      flex-flow: column;
-      align-items: flex-start;
+    flex-flow: column;
+    align-items: flex-start;
   }
   .confidential {
-      width: 230px;
-      margin: 14px 0;
+    width: 230px;
+    margin: 14px 0;
   }
 }
 
 @media screen and (max-width: 960px) {
   .content {
-      grid-template-rows: 61px 1fr auto;
-      grid-template-columns: 620px;
-      grid-template-areas:
-          "tabs"
-          "left"
-          "right";
+    grid-template-rows: 61px 1fr auto;
+    grid-template-columns: 620px;
+    grid-template-areas:
+      "tabs"
+      "left"
+      "right";
   }
   .left {
-      border-bottom-left-radius: 0;
-      height: max-content;
-      padding: 36px 58px 0 45px;
+    border-bottom-left-radius: 0;
+    height: max-content;
+    padding: 36px 58px 0 45px;
   }
   .right {
-      background-color: var(--mainColor);
-      padding-top: 32px;
-      padding-bottom: 54px;
-      border-bottom-left-radius: 15px;
-      border-top-right-radius: 0;
+    background-color: var(--mainColor);
+    padding-top: 32px;
+    padding-bottom: 54px;
+    border-bottom-left-radius: 15px;
+    border-top-right-radius: 0;
   }
   .tagline {
-      margin-bottom: 31px;
+    margin-bottom: 31px;
   }
   .numDishes {
-      margin-top: 32px;
-      margin-bottom: 0;
-      grid-area: third;
-  }
+    margin-top: 32px;
+    margin-bottom: 0;
+    grid-area: third;
+  } 
   .daySwitch .button {
-      width: 28px;
-      height: 28px;
+    width: 28px;
+    height: 28px;
   }
   .dish:first-child {
-      margin-right: 17px;
-      margin-bottom: 22px;
+    margin-right: 17px;
+    margin-bottom: 22px;
   }
   .dish {
-      width: 250px;
+    height: 47px;
+    width: 127 px;
+  }
+  .dessert {
+    height: 51px;
+    margin-bottom: 41px;
+  }
+  .dessert p {
+    font-size: 16px;
   }
   .menuSampleCont {
-      grid-template-rows: 35px 1fr;
-      margin-bottom: 21px;
-      grid-area: first;
+    grid-template-rows: 35px 1fr;
+    margin-bottom: 21px;
+    grid-area: first;
   }
   .pics {
-      grid-template-rows: 122px;
-      grid-gap: 20px 18px;
+    grid-template-rows: 122px;
+    grid-gap: 20px 18px;
   }
   .pic {
-      height: 124px;
+    height: 124px;
   }
   .dishPicCont {
-      width: 160px;
-      height: 122px;
+    width: 160px;
+    height: 122px;
   }
   .nutritionAndLink {
-      grid-area: second;
+    grid-area: second;
   }
   .menuLink {
-      margin-top: 15px;
+    margin-top: 15px;
   }
   .day,
   .numDays {
-      background-color: var(--lighterColor);
-      width: 245px;
-      height: 60px;
+    background-color: var(--lighterColor);
+    width: 245px;
+    height: 60px;
   }
   .price {
-       margin-bottom: 31px;
+    margin-bottom: 31px;
   }
   .payment {
-      flex-flow: row;
+    flex-flow: row;
   }
   .paymentMethod:first-child {
-      margin-right: 100px;
+    margin-right: 100px;
   }
   .paymentMethod::before {
-      background-color: var(--lighterColor);
+    background-color: var(--lighterColor);
   }
   .phone {
-      margin-bottom: 35px;
+    margin-bottom: 35px;
   }
   .button {
-      flex-flow: row;
-      align-items: center;
+    flex-flow: row;
+    align-items: center;
   }
   .button button {
-      width: 250px;
-      height: 60px;
+    width: 250px;
+    height: 60px;
   }
 }
 
 @media screen and (max-width: 640px) {
   .content {
-      grid-template-rows: 52px 1fr auto;
-      grid-template-columns: 460px;
+    grid-template-rows: 52px 1fr auto;
+    grid-template-columns: 460px;
   }
-  .left, .right {
-      padding-left: 28px;
-      padding-right: 28px;
+  .left,
+  .right {
+    padding-left: 28px;
+    padding-right: 28px;
   }
   .left {
-      padding-top: 30px;
+    padding-top: 30px;
   }
   .right {
-      padding-bottom: 48px;
+    padding-bottom: 48px;
   }
   .tabs {
-      height: 52px;
+    height: 52px;
   }
   .tab {
-      font-size: 18px;
+    font-size: 18px;
   }
   .tagline {
-      margin-bottom: 24px;
+    margin-bottom: 24px;
   }
   .tagline p {
-      font-size: 16px;
+    font-size: 16px;
   }
   .dish:first-child {
-      margin-right: 21px;
+    margin-right: 21px;
   }
   .dish {
-      width: 190px;
-      height: 54px;
+    width: 190px;
+    height: 54px;
+  }
+  .dessert {
+    margin-bottom: 32px;
   }
   .menuSampleCont {
-      grid-template-rows: 35px 1fr;
-      margin-bottom: 26px;
+    grid-template-rows: 35px 1fr;
+    margin-bottom: 26px;
   }
   .pics {
-      grid-template-rows: 95px;
-      grid-gap: 16px 14px;
-      padding-top: 22px;
+    grid-template-rows: 95px;
+    grid-gap: 16px 14px;
+    padding-top: 22px;
   }
   .pic {
-      height: 97px;
+    height: 97px;
   }
   .dishPicCont {
-      width: 124px;
-      height: 95px;
+    width: 124px;
+    height: 95px;
   }
   .nutrition {
-      font-size: 16px;;
+    font-size: 16px;
   }
   .menuLink {
-      margin-top: 15px;
+    margin-top: 15px;
   }
   .day,
   .numDays {
-      width: 190px;
-      height: 54px;
+    width: 190px;
+    height: 54px;
   }
   .price {
-      margin-bottom: 21px;
+    margin-bottom: 21px;
   }
   .paymentMethod:first-child {
-      margin-right: 36px;
+    margin-right: 36px;
   }
   .phone {
-      margin-bottom: 32px;
+    margin-bottom: 32px;
   }
   .button {
-      flex-flow: row;
-      align-items: center;
-      justify-content: space-between;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-between;
   }
   .button button {
-      width: 190px;
+    width: 190px;
   }
   .confidential {
-      width: 100%;
-      margin-left: 20px;
+    width: 100%;
+    margin-left: 20px;
   }
 }
 
 @media screen and (max-width: 480px) {
   .content {
-      grid-template-rows: 45px 1fr auto;
-      grid-template-columns: 300px;
+    grid-template-rows: 45px 1fr auto;
+    grid-template-columns: 300px;
   }
-  .left, .right {
-      padding-left: 16px;
-      padding-right: 16px;
+  .left,
+  .right {
+    padding-left: 16px;
+    padding-right: 16px;
   }
   .right {
-      padding-top: 40px;
+    padding-top: 40px;
   }
   .tagline {
-      flex-flow: row-reverse;
-      justify-content: space-between;
-      margin-bottom: 22px;
+    flex-flow: row-reverse;
+    justify-content: space-between;
+    margin-bottom: 22px;
   }
   .tagline p {
-      text-align: start;
-      width: 210px;
-      transform: translateY(-2px);
+    text-align: start;
+    width: 210px;
+    transform: translateY(-2px);
   }
   .tagline .taglinePic {
-      margin-right: 0;
-      height: 34px;
+    margin-right: 0;
+    height: 34px;
   }
   .tagline svg {
-      width: 34px;
-      height: 34px;
+    width: 34px;
+    height: 34px;
   }
   .tabs {
-      margin-bottom: 40px;
+    margin-bottom: 40px;
   }
   .tabs {
-      height: 45px;
+    height: 45px;
   }
   .tab {
-      font-size: 17px;
-      width: 100%;
-      padding: 0 15px;
+    font-size: 17px;
+    width: 100%;
+    padding: 0 15px;
+  }
+  .numDishes {
+    margin-bottom: 17px;
   }
   .dish:first-child {
-      margin-right: 11px;
-      margin-bottom: 17px;
+    margin-right: 11px;
+    margin-bottom: 17px;
   }
   .dish:last-child {
-      margin-bottom: 0;
+    margin-bottom: 0;
   }
   .dish {
-      width: 128px;
-      height: 54px;
-      font-size: 14px;
-      padding: 0 10px;
-      line-height: 1.2em;
+    width: 122px;
+    height: 39px;
+    font-size: 14px;
+    padding: 0 10px;
+    line-height: 1.2em;
   }
   .dish.hit::after {
-      top: 0;
-      right: 10px;
-      width: 36px;
-      height: 20px;
-      transform: translateY(-50%);
-      border-radius: 7px;
-      font-size: 12px;
+    top: 0;
+    right: 10px;
+    width: 36px;
+    height: 20px;
+    transform: translateY(-50%);
+    border-radius: 7px;
+    font-size: 12px;
+  }
+  .dessert {
+    height: 46px;
+    margin-bottom: 29px;
+  }
+  .dessert p {
+    font-size: 14px;
+  }
+  .daySwitch .day-full {
+    display: block;
+  }
+  .daySwitch .day-short {
+    display: none;
   }
   .menuSampleCont {
-      grid-template-rows: auto 1fr auto;
-      grid-template-columns: 100%;
-      grid-template-areas:
-          "text"
-          "pics"
-          "button";
-      margin-bottom: 21px;
-      place-items: center center;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 100%;
+    grid-template-areas:
+      "text"
+      "pics"
+      "button";
+    margin-bottom: 21px;
+    place-items: center center;
   }
   .pics {
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: 97px;
-      grid-gap: 16px 15px;
-      padding-top: 23px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 97px;
+    grid-gap: 16px 15px;
+    padding-top: 23px;
   }
   .dishPicCont {
-      width: 126px;
-      height: 97px;
+    width: 126px;
+    height: 97px;
   }
   .daySwitch {
-      width: 220px;
-      padding-top: 23px;
+    width: 220px;
+    padding-top: 23px;
   }
   .menuSampleCont .daySwitch {
-      place-self: center center;
+    place-self: center center;
   }
   .nutrition {
-      display: flex;
-      flex-flow: column;
-      align-items: center;
-      height: 64px;
-      padding: 11px 0;
-      box-sizing: border-box;
-      line-height: 1.2em;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    height: 64px;
+    padding: 11px 0;
+    box-sizing: border-box;
+    line-height: 1.2em;
   }
   .nutrition .text {
-      font-weight: bolder;
+    font-weight: bolder;
   }
   .day,
   .numDays {
-      width: 128px;
-      height: 54px;
-      font-size: 14px;
+    width: 128px;
+    height: 54px;
+    font-size: 14px;
   }
   .numDays {
-      display: flex;
-      flex-flow: column;
+    display: flex;
+    flex-flow: column;
   }
   .numDaysSelect {
-      margin-bottom: 36px;
+    margin-bottom: 36px;
   }
-  .paymentMethod, .phone {
-      font-size: 16px;
+  .paymentMethod,
+  .phone {
+    font-size: 16px;
   }
   .payment {
-      flex-flow: column;
-      margin-bottom: 34px;
+    flex-flow: column;
+    margin-bottom: 34px;
   }
   .phone {
-      margin-bottom: 17px;
-      font-size: 16px;
+    margin-bottom: 17px;
+    font-size: 16px;
   }
   .button {
-      flex-flow: column;
-      align-items: center;
-      justify-content: space-between;
+    flex-flow: column;
+    align-items: center;
+    justify-content: space-between;
   }
-  .button button, .orderInfo, .confidential {
-      width: 100%;
+  .button button,
+  .orderInfo,
+  .confidential {
+    width: 100%;
   }
   .confidential {
-      text-align: center;
-      margin: 20px 0 0 0;
+    text-align: center;
+    margin: 20px 0 0 0;
   }
 }

@@ -1,6 +1,7 @@
-import { taglinePics, daySwitchArrow, promocodePics, popupIcon } from './svgs.js';
-import { taglineTexts, daysTexts, promoResultsTexts } from "./data.js";
+import { taglinePics, daySwitchArrow, promocodePics, popupIcon, dessertPlus, dishExampleArrow, preCartItemCross, preCardPlus } from './svgs.js';
+import { taglineTexts, daysTexts, promoResultsTexts, dessertLines, dict } from "./data.js";
 import { getPromocodeResults } from './service.js';
+import { nutritionValues } from './nutritionData.js';
 
 const activityParams = (param) => ({
     computed: {
@@ -49,12 +50,36 @@ export const numDishesComp = {
     ...activityParams('numDishes')
 }
 
+export const dessertComp = {
+    props: ['set-value', 'is-added', 'tab'],
+    template: `
+        <div class="dessert" :class="{ hidden: isHidden, added: isAdded }" v-on:click="toggle">
+            <p>{{ text }}</p>
+            <div class="dessert__plus">${dessertPlus}</div>
+        </div>
+    `,
+    computed: {
+        isHidden: function() {
+            return this.tab === 'lite';
+        },
+        text: function() {
+            return this.isAdded ? dessertLines.remove : dessertLines.add;
+        }
+    },
+    methods: {
+        toggle: function() {
+            this.setValue('addDessert', !this.isAdded);
+        }
+    }
+}
+
 export const daySwitchComp = {
     props: ['day', 'set-value'],
     template: `
         <div class="daySwitch">
             <div class="button prev" v-on:click="prevDay" v-html="arrow"></div>
-            <div class="text">{{ dayText }}</div>
+            <div class="text day-full">{{ dayText }}</div>
+            <div class="text day-short">{{ dayShortText }}</div>
             <div class="button next" v-on:click="nextDay" v-html="arrow"></div>
         </div>
     `,
@@ -62,11 +87,14 @@ export const daySwitchComp = {
         dayText: function() {
             return daysTexts.long[this.day];
         },
+        dayShortText: function() {
+            return daysTexts.short[this.day];
+        },
         arrow: () => daySwitchArrow
     },
     methods: {
         nextDay: function() {
-            const newDay = this.day < 5 ? this.day + 1 : 0;
+            const newDay = this.day < 6 ? this.day + 1 : 0;
             this.setValue('day', newDay);
         },
         prevDay: function() {
@@ -122,15 +150,94 @@ export const dishExampleComp = {
 
 export const dishesExapmleComp = {
     props: ['set-value', 'dishes'],
+    data() {
+        return {
+            x: 0,
+            onBorder: 'left',
+            isDrag: false
+        }
+    },
     template: `
-        <div class="pics">
-            <dish-example
-                v-for="dish in dishes"
-                :set-value="setValue"
-                :dish-data="dish"
-            ></dish-example>
+        <div class="pics__container" :class="{ onLeft: isOnLeft, onRight: isOnRight }">
+            <div
+                ref="cont"
+                v-on:mousedown="addListener"
+                v-on:mouseup="removeListener"
+                v-on:mouseleave="removeListener"
+                v-on:mousemove="move"
+            >
+                <div class="pics" v-bind:style="transformation" :class="{ smooth: !isDrag }">
+                    <dish-example
+                        v-for="dish in dishes"
+                        :set-value="setValue"
+                        :dish-data="dish"
+                    ></dish-example>
+                </div>
+            </div>
+            <div class="dishExampleArrow dishExampleArrow-left" :class="{ hidden: isOnLeft }" v-on:click="moveLeft">${dishExampleArrow}</div>
+            <div class="dishExampleArrow dishExampleArrow-right" :class="{ hidden: isOnRight }" v-on:click="moveRight">${dishExampleArrow}</div>
         </div>
-    `
+    `,
+    computed: {
+        isOnLeft: function() {
+            return this.onBorder === 'left';
+        },
+        isOnRight: function() {
+            return this.onBorder === 'right';
+        },
+        transformation: function() {
+            return { transform: `translateX(${this.x}px)` };
+        },
+        maxShift: function() {
+            const allElements = this.$refs.cont.querySelectorAll('.dishPicCont');
+            const lastElement = allElements[allElements.length - 1];
+            return lastElement.offsetLeft + lastElement.offsetWidth - this.$refs.cont.offsetWidth;
+        },
+        dishElementWidth: function() {
+            const elem = this.$refs.cont.querySelector('.dishPicCont');
+            return elem ? elem.offsetWidth : 0;
+        }
+    },
+    methods: {
+        move: function(e) {
+            if (this.isDrag) {
+                this.x += e.movementX;
+                if (this.x > 0) {
+                    this.x = 0;
+                    this.onBorder = 'left';
+                } else if (Math.abs(this.x) > this.maxShift) {
+                    this.x = -this.maxShift;
+                    this.onBorder = 'right';
+                } else {
+                    this.onBorder = null;
+                }
+            }
+        },
+        addListener: function() {
+            this.isDrag = true;
+        },
+        removeListener: function() {
+            this.isDrag = false;
+        },
+        moveLeft: function() {
+            this.x += this.dishElementWidth;
+            if (this.x > 0) {
+                this.x = 0;
+                this.onBorder = 'left';
+            } else {
+                this.onBorder = null;
+            }
+        },
+        moveRight: function() {
+            this.x -= this.dishElementWidth;
+            if (Math.abs(this.x) > this.maxShift) {
+                this.x = -this.maxShift;
+                this.onBorder = 'right';
+            } else {
+                this.onBorder = null;
+            }
+        }
+    }
 }
 
 export const dishExamplePopup = {
@@ -145,6 +252,27 @@ export const dishExamplePopup = {
     computed: {
         getStyle: function() {
             return `top: ${this.dishData.y}px; left: ${this.dishData.x}px;`;
+        }
+    }
+}
+
+export const nutritionComp = {
+    props: ['tab', 'num-dishes', 'day', 'is-dessert-added'],
+    template: `
+        <div class="nutrition">
+            <div class="text">КБЖУ</div>
+            <div class="values">{{ nutritionText }}</div>
+        </div>
+    `,
+    computed: {
+        nutritionText: function() {
+            const data = nutritionValues[this.tab][this.numDishes][this.day];
+            let [ ccal, prot, fat, carb] = data.split('/');
+            if (this.isDessertAdded) {
+                const dessertsData = nutritionValues[this.tab].desserts;
+                const dessertData = dessertsData ? dessertsData[this.day] : null;
+            }
+            return `${ccal} ккал / Б: ${prot} / Ж: ${fat} / У: ${carb}`;
         }
     }
 }
@@ -169,18 +297,17 @@ export const numDaysComp = {
 }
 
 export const promocodeInputComp = {
-    props: ['set-value'],
+    props: ['set-value', 'promocode-results', 'saved-configs'],
     data() {
         return {
-            promocode: '',
-            status: 'ready'
+            promocode: ''
         }
     },
     template: `
-        <div class="promo enter" :class="status">
+        <div class="promo enter" :class="resultStatus">
             <input
                 class="promocode"
-                :class="{ 'bad': status === 'bad' }"
+                :class="{ 'bad': resultStatus === 'bad' }"
                 type="text"
                 placeholder="Введите промокод"
                 v-on:input="inputPromocode"
@@ -193,32 +320,98 @@ export const promocodeInputComp = {
     methods: {
         inputPromocode: function (e) {
             this.promocode = e.target.value.toLowerCase();
-            this.status = 'ready';
+            this.setValue('promocodeResults', 'ready', 'status');
         },
         promocodeKeydown: function (e) {
             if (e.key === 'Enter') {
                 this.enterPromocode();
             } else {
-                this.setValue('promocodeResults', 'ready', 'code');
+                this.setValue('promocodeResults', 'ready', 'status');
                 this.setValue('promocodeResults', null, 'type');
                 this.setValue('promocodeResults', null, 'discount');
             }
         },
         enterPromocode: async function () {
             this.status = 'loading';
+            this.setValue('promocodeResults', 'loading', 'status');
             const promoRes = await getPromocodeResults(this.promocode);
-            this.status = promoRes.code;
-            this.setValue('promocodeResults', promoRes.code, 'code');
+            this.setValue('promocodeResults', promoRes.status, 'status');
             this.setValue('promocodeResults', promoRes.type, 'type');
             this.setValue('promocodeResults', promoRes.discount, 'discount');
         },
     },
     computed: {
+        resultStatus: function() {
+            if (this.promocodeResults.status === 'ok') {
+                return this.promocodeResults.status;
+            }
+            return this.savedConfigs.length ? 'special' : this.promocodeResults.status;
+        },
         icon: function() {
-            return promocodePics[this.status];
+            return promocodePics[this.resultStatus];
         },
         resultsText: function() {
-            return promoResultsTexts[this.status] || '';
+            const text = promoResultsTexts[this.resultStatus];
+            if (typeof text === 'function') {
+                return text(this.promocodeResults.type, this.promocodeResults.discount);
+            }
+            return text || '';
+        }
+    }
+}
+
+export const preCartItemComp = {
+    props: ['text', 'index', 'delete-config'],
+    template: `
+        <div class="pre-cart__item">
+            <p>{{ text }}</p>
+            <div v-if="deleteConfig" class="cross" v-on:click="remove">${preCartItemCross}</div>
+        </div>
+    `,
+    methods: {
+        remove: function() {
+            this.deleteConfig(this.index)
+        }
+    }
+}
+
+export const preCartComp = {
+    props: ['tab', 'is-dessert-added', 'num-dishes', 'num-days', 'days-selection', 'price', 'saved-configs', 'add-config', 'delete-config'],
+    template: `
+        <div class="pre-cart">
+            <pre-cart-item
+                v-for="(config, index) in savedConfigs"
+                :text="getItemText(config)"
+                :index="index"
+                :key="configKey"
+                :delete-config="deleteConfig"
+            ></pre-cart-item>
+            <pre-cart-item :text="currentText" key="current"></pre-cart-item>
+            <div class="pre-cart__add" v-on:click="addConfig">
+                <div class="plus">${preCardPlus}</div>
+                <p>Добавить рацион</p>
+            </div>
+        </div>
+    `,
+    computed: {
+        currentText: function() {
+            return `
+                Рацион "${dict.menus[this.tab]}":
+                ${dict.numDishes[this.numDishes]}${this.isDessertAdded ? '+десерт' : ''},
+                ${dict.daysSelect[this.daysSelection][this.numDays]} — ${this.price}
+            `;
+        },
+        configKey: function() {
+            return JSON.stringify(this.config);
+        }
+    },
+    methods: {
+        getItemText: function(config) {
+            return `
+                Рацион "${dict.menus[config.tab]}":
+                ${dict.numDishes[config.numDishes]}${config.isDessertAdded ? '+десерт' : ''},
+                ${dict.daysSelect[config.daysSelection][config.numDays]} — ${config.price.textPrice}
+            `;
         }
     }
 }
@@ -241,11 +434,6 @@ export const phoneInputComp = {
             v-on:keydown="inputPhone"
         ></input>
     `,
-    data() {
-        return {
-            inputElem: null
-        }
-    },
     mounted() {
         const app = this;
         $('.phone').inputmask("+7 (999) 999-99-99", {

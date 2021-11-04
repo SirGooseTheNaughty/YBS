@@ -24,6 +24,34 @@ export const daysTexts = {
     ]
 };
 export const promoResultsTexts = {
-    ok: 'Скидка применена',
-    bad: 'Промокод не применим к этому товару'
+    ok: (type, discount) => `Ваша скидка: ${discount}${type === 'sum' ? 'р' : '%'}`,
+    bad: 'Не удалось применить данный промокод',
+    special: 'Применена скидка 10% на дополнительные рационы'
+};
+export const dessertLines = {
+    add: 'Добавить десерт',
+    remove: 'Убрать десерт'
+};
+export const dict = {
+    menus: {
+        home: 'Домашний',
+        lite: 'Лайт',
+        avan: 'Авангард',
+    },
+    numDishes: {
+        '3': '3 блюда',
+        '4': '4 блюда',
+        '5': '5 блюд',
+        '6': '6 блюд',
+    },
+    daysSelect: {
+        'work': {
+            '5': '5 дней',
+            '20': '20 дней',
+        },
+        'each': {
+            '5': '7 дней',
+            '20': '28 дней',
+        },
+    }
 };

@@ -5,11 +5,15 @@ import { appComp } from './modules/app.js';
 import {
     tabComp, 
     tagLineComp, 
-    numDishesComp, 
+    numDishesComp,
+    dessertComp,
+    nutritionComp,
     daySwitchComp, 
     daysSelectionComp, 
     numDaysComp, 
     promocodeInputComp,
+    preCartItemComp,
+    preCartComp,
     paymentMethodComp,
     phoneInputComp,
     dishesExapmleComp,
@@ -20,6 +24,8 @@ import {
 Vue.component('tab', tabComp);
 Vue.component('tagline', tagLineComp);
 Vue.component('num-dishes', numDishesComp);
+Vue.component('dessert', dessertComp);
+Vue.component('nutrition', nutritionComp);
 Vue.component('day-switch', daySwitchComp);
 Vue.component('dishes-example', dishesExapmleComp);
 Vue.component('dish-example', dishExampleComp);
@@ -27,6 +33,8 @@ Vue.component('dish-popup', dishExamplePopup);
 Vue.component('days-selection', daysSelectionComp);
 Vue.component('num-days', numDaysComp);
 Vue.component('promocode', promocodeInputComp);
+Vue.component('pre-cart-item', preCartItemComp);
+Vue.component('pre-cart', preCartComp);
 Vue.component('payment-method', paymentMethodComp);
 Vue.component('phone-input', phoneInputComp);
 
@@ -34,5 +42,12 @@ const app = new Vue(appComp);
 try {
     if (globalApp) {
         globalApp = app;
+    }
+} catch (e) {};
+try {
+    if (tildaMenuLinks) {
+        globalApp.setParameter('menuLinks', tildaMenuLinks.home, 'home');
+        globalApp.setParameter('menuLinks', tildaMenuLinks.lite, 'lite');
+        globalApp.setParameter('menuLinks', tildaMenuLinks.avan, 'avan');
     }
 } catch (e) {};

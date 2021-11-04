@@ -11,6 +11,13 @@ export async function fetchData () {
         result = res.products.map(dish => {
             const [ menu, day, index ] = dish.title.split('-');
             let picUrl = tildaPicUrl;
+            const characteristics = { ccal: 0, prot: 0, fat: 0, carb: 0 };
+            Object.keys(characteristics).forEach(key => {
+                const property = dish.characteristics.find(car => car.title === key);
+                if (property) {
+                    characteristics[key] = property.value;
+                }
+            });
             if (dish.gallery) {
                 try {
                     picUrl = JSON.parse(dish.gallery)[0].img;
@@ -25,7 +32,8 @@ export async function fetchData () {
                 name: dish.descr,
                 picUrl,
                 text: dish.text,
-                weight: dish.pack_m
+                weight: dish.pack_m,
+                characteristics
             }
         });
     })
@@ -48,10 +56,10 @@ async function fetchPromocode (code) {
 }
 
 export async function getPromocodeResults (promocode) {
-    const promoResult = {code: null, type: null, discount: null};
+    const promoResult = {status: null, type: null, discount: null};
     const res = await fetchPromocode (promocode);
         if (res.message === 'OK') {
-            promoResult.code = 'ok';
+            promoResult.status = 'ok';
             if (res.discountpercent) {
                 promoResult.type = 'persent';
                 promoResult.discount = parseFloat(res.discountpercent);
@@ -60,7 +68,7 @@ export async function getPromocodeResults (promocode) {
                 promoResult.discount = parseFloat(res.discountsum);
             }
         } else {
-            promoResult.code = 'bad';
+            promoResult.status = 'bad';
         }
     return promoResult;
 }

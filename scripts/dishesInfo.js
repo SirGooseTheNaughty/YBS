@@ -791,7 +791,7 @@ const getMockedData = () => {
                 picUrl: tildaPicUrl,
                 menu,
                 day: i,
-                index: j
+                index: j === day.length - 1 ? 'dessert' : j
             });
         });
     }

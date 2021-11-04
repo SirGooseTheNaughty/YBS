@@ -25,6 +25,7 @@
                             <num-dishes class="hit" title="5 блюд" value="5" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
                             <num-dishes title="6 блюд" value="6" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
                         </div>
+                        <dessert :set-value="setParameter" :is-added="addDessert" :tab="tab"></dessert>
                         <div class="menuSampleCont">
                             <div class="menuSampleText">Пример меню на день</div>
                             <day-switch :day="day" :set-value="setParameter"></day-switch>
@@ -32,11 +33,13 @@
                             <dish-popup :dish-data="dishPopupInfo"></dish-popup>
                         </div>
                         <div class="nutritionAndLink">
-                            <div class="nutrition">
-                                <div class="text">КБЖУ</div>
-                                <div class="values">1800-2000 ккал</div>
-                            </div>
-                            <a class="menuLink" href="#home">Подробное меню на неделю</a>
+                            <nutrition
+                                :tab="tab"
+                                :num-dishes="numDishes"
+                                :day="day"
+                                :is-dessert-added="isDessertAdded"
+                            ></nutrition>
+                            <a class="menuLink" :href="menuLink">Подробное меню на неделю</a>
                         </div>
                     </div>
                 </div>
@@ -52,12 +55,23 @@
                     <num-days text="5" subtext="(900 р/день)" value="5" :get-is-active="isActive" :set-value="setParameter"></num-days>
                     <num-days text="20" subtext="(750 р/день)" value="20" :get-is-active="isActive" :set-value="setParameter"></num-days>
                 </div>
-                <promocode :set-value="setParameter"></promocode>
+                <promocode :set-value="setParameter" :promocode-results="promocodeResults" :saved-configs="savedConfigs"></promocode>
+                <pre-cart
+                    :tab="tab"
+                    :is-dessert-added="isDessertAdded"
+                    :num-days="numDays"
+                    :num-dishes="numDishes"
+                    :price="price.textPrice"
+                    :days-selection="daysSelection"
+                    :saved-configs="savedConfigs"
+                    :add-config="saveConfig"
+                    :delete-config="deleteConfig"
+                ></pre-cart>
                 <div class="price">
                     <div class="priceLabel">Итого:</div>
                     <div class="priseResults">
-                        <div class="totalPrice">{{ price.textPrice }}</div>
-                        <div class="yourProfit">{{ price.profit }}</div>
+                        <div class="totalPrice">{{ totalPrice.textPrice }}</div>
+                        <div class="yourProfit">{{ totalPrice.textProfit }}</div>
                     </div>
                 </div>
                 <div class="line"></div>
@@ -67,7 +81,7 @@
                 </div>
                 <phone-input :set-value="setParameter"></phone-input>
                 <div class="button">
-                    <a class="orderInfo" href="" style="pointer-events: none"><button id="order" :class="{ active: phone }">ЗАКАЗАТЬ</button></a>
+                    <a class="orderInfo" :href="orderLink" style="pointer-events: none"><button id="order" :class="{ active: phone }">ЗАКАЗАТЬ</button></a>
                     <p class="confidential">
                         Оформляя заказ вы соглашаетесь с 
                         <a href="https://drive.google.com/file/d/1WnK6uXfTHwF56dyzr6fCItt3F9plPNyU/view">политикой конфиденциальности</a>
@@ -83,6 +97,11 @@
         let globalApp = true;
         const projectId = '2857002';
         const tildaPicUrl = window.location.toString() + '/../assets/no-pic.png';
+        const tildaMenuLinks = {
+            home: '#tilda-home',
+            lite: '#tilda-lite',
+            avan: '#tilda-avan',
+        };
     </script>
     
     <script src="./scripts/dishesInfo.js"></script>
