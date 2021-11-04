@@ -81,7 +81,7 @@
                     <payment-method text="Оплата онлайн" value="card" :get-is-active="isActive" :set-value="setParameter"></payment-method>
                 </div>
                 <phone-input :set-value="setParameter"></phone-input>
-                <div class="button">
+                <div class="button" v-on:click="checkout">
                     <a class="orderInfo" :href="orderLink" style="pointer-events: none"><button id="order" :class="{ active: phone }">ЗАКАЗАТЬ</button></a>
                     <p class="confidential">
                         Оформляя заказ вы соглашаетесь с 
