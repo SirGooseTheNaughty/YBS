@@ -35,7 +35,7 @@ export const appComp = {
             },
             menuLinks: {home: '#home', lite: '#lite', avan: '#avan'},
             dishesX: 0,
-            basket: { selector: '', price: null, phone: null, cashBtn: null, cardBtn: null, productsCont: null, promoInput: null, promoBtn: null, submitBtn: null }
+            basket: { selector: '', price: null, phone: null, cashBtn: null, cardBtn: null, productsCont: null, promoInput: null, promoBtn: null, submitBtn: null, preventOrder: false }
         }
     },
     async mounted() {

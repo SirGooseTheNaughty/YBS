@@ -57,3 +57,9 @@ try {
         globalApp.setParameter('menuLinks', tildaMenuLinks.avan, 'avan');
     }
 } catch (e) {};
+try {
+    if (preventOrder) {
+        console.log('order is off');
+        globalApp.setParameter('basket', true, 'preventOrder');
+    }
+} catch(e) {}
