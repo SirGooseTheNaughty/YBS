@@ -1,6 +1,6 @@
 export async function fetchData () {
     let result = [];
-    await fetch("https://store.tildacdn.com/api/getproductslist/?storepartuid=414267329441&slice=1&size=150")
+    await fetch("https://store.tildacdn.com/api/getproductslist/?storepartuid=414267329441&slice=1&size=160")
     .then(res => res.json())
     .then(res => {
         result = res.products.map(dish => {
