@@ -1,6 +1,6 @@
 export async function fetchData () {
     let result = [];
-    await fetch("https://store.tildacdn.com/api/getproductslist/?storepartuid=414267329441&recid=371213320&c=1635169225701&getparts=true&getoptions=true&slice=1&size=200", {
+    await fetch("https://store.tildacdn.com/api/getproductslist/?storepartuid=414267329441&recid=375537802&c=1636102978737&getparts=true&getoptions=true&slice=1&size=200", {
         "headers": {
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
         },
