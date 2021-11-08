@@ -54,11 +54,6 @@ export const appComp = {
                 this[parameter][subParameter] = value;
             } else {
                 this[parameter] = value;
-                if (parameter === 'tab' && value === 'lite') {
-                    if ((this.numDishes !== '3' && this.numDishes !== '5')) {
-                        this.numDishes = '5';
-                    }
-                }
             }
         },
         isActive: function(parameter, value) {
