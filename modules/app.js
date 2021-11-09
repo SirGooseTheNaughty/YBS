@@ -159,6 +159,12 @@ export const appComp = {
                     `${dict.daysSelect[config.daysSelection][config.numDays]}`;
             });
             return link(configs);
+        },
+        isMobileSafari: function() {
+            const agent = window.navigator.userAgent;
+            const isSafari = agent.indexOf("Safari") > -1;
+            const isMobile = /Mobi/i.test(agent);
+            return isMobile && isSafari;
         }
     }
 };

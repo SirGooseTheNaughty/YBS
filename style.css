@@ -70,6 +70,10 @@ p {
   --darkColor: #8d839c;
   --nutritionColor: #9791a0;
 }
+[data-mobile-safari="true"] .pics__container::before,
+[data-mobile-safari="true"] .pics__container::after {
+  opacity: 0 !important;
+}
 
 /* segments */
 .tabs {
