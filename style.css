@@ -775,8 +775,6 @@ p {
     margin-bottom: 36px;
   }
   .pics {
-    grid-template-rows: repeat(2, 101px);
-    grid-gap: 21px 21px;
     padding-top: 16px;
   }
   .dishPopup__icon {
@@ -865,10 +863,6 @@ p {
     grid-template-rows: 35px 1fr;
     margin-bottom: 21px;
     grid-area: first;
-  }
-  .pics {
-    grid-template-rows: 122px;
-    grid-gap: 20px 18px;
   }
   .nutritionAndLink {
     grid-area: second;
@@ -959,8 +953,6 @@ p {
     margin-bottom: 26px;
   }
   .pics {
-    grid-template-rows: 95px;
-    grid-gap: 16px 14px;
     padding-top: 22px;
   }
   .nutrition {
@@ -1087,14 +1079,14 @@ p {
     height: 155px;
   }
   .pics {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 97px;
-    grid-gap: 16px 15px;
     padding-top: 23px;
   }
   .pic {
     min-width: 175px;
     height: 131px;
+  }
+  .dishPicCont {
+    margin-right: 2px;
   }
   .daySwitch {
     width: 220px;
