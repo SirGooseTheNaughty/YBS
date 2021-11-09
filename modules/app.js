@@ -135,11 +135,21 @@ export const appComp = {
                 textProfit: `Ваша выгода — ${profit} р/день`
             }
         },
+        cartPrice: function() {
+            let { price, profit } = this.price;
+            if (this.savedConfigs.length) {
+                this.savedConfigs.forEach(config => {
+                    price += config.price.price;
+                    profit += config.price.profit;
+                });
+            }
+            return price;
+        },
         menuLink: function() {
             return this.menuLinks[this.tab];
         },
         orderLink: function() {
-            const link = (configs) => `#order:${configs}=${this.totalPrice.price}`;
+            const link = (configs) => `#order:${configs}=${this.cartPrice}`;
             let configs = `Рацион "${dict.menus[this.tab]}":` + 
                 `${dict.numDishes[this.numDishes]}${this.isDessertAdded ? '+десерт' : ''},` +
                 `${dict.daysSelect[this.daysSelection][this.numDays]}`;
