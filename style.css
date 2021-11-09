@@ -439,7 +439,7 @@ p {
 }
 .day,
 .numDays {
-  width: 188px;
+  width: 100%;
   height: 48px;
   border-radius: 15px;
   background-color: var(--mainColor);
@@ -449,6 +449,10 @@ p {
   cursor: pointer;
   font-size: 16px;
   transition: background-color var(--animation-time-short) ease, color var(--animation-time-short) ease;
+}
+.day:first-child,
+.numDays:first-child {
+  margin-right: 9px;
 }
 .numDay {
   margin-right: 0.3em;
@@ -777,10 +781,6 @@ p {
   .numDaysSelect {
     margin-bottom: 26px;
   }
-  .day,
-  .numDays {
-    width: 144px;
-  }
   .price {
     margin-bottom: 21px;
   }
@@ -816,12 +816,11 @@ p {
   .left {
     border-bottom-left-radius: 0;
     height: max-content;
-    padding: 36px 58px 0 45px;
+    padding: 36px 45px 0 45px;
   }
   .right {
     background-color: var(--mainColor);
-    padding-top: 41px;
-    padding-bottom: 54px;
+    padding: 41px 45px 54px 45px;
     border-bottom-left-radius: 15px;
     border-top-right-radius: 0;
   }
@@ -873,8 +872,10 @@ p {
   .day,
   .numDays {
     background-color: var(--lighterColor);
-    width: 245px;
-    height: 60px;
+  }
+  .day:first-child,
+  .numDays:first-child {
+    margin-right: 7px;
   }
   .price {
     margin-bottom: 31px;
@@ -961,10 +962,9 @@ p {
   .menuLink {
     margin-top: 15px;
   }
-  .day,
-  .numDays {
-    width: 190px;
-    height: 54px;
+  .day:first-child,
+  .numDays:first-child {
+    margin-right: 22px;
   }
   .price {
     margin-bottom: 21px;
@@ -996,8 +996,8 @@ p {
   }
   .left,
   .right {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 25px;
+    padding-right: 25px;
   }
   .right {
     padding-top: 29px;
@@ -1114,11 +1114,17 @@ p {
   .days {
     margin-bottom: 25px;
   }
+  .day:first-child,
+  .numDays:first-child {
+    margin-right: 7px;
+  }
   .day,
   .numDays {
-    width: 128px;
-    height: 54px;
+    height: 40px;
     font-size: 14px;
+  }
+  .numDays {
+    height: 53px;
   }
   .numDays {
     display: flex;
