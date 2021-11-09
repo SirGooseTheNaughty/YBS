@@ -180,6 +180,9 @@ export const dishesExapmleComp = {
             const lastElement = allElements[allElements.length - 1];
             this.maxShift = lastElement.offsetLeft + lastElement.offsetWidth - this.$refs.cont.offsetWidth;
         }
+        if (this.x === 0) {
+            this.onBorder = 'left'
+        }
         if (this.x === 'max' || (this.onBorder === 'right' && this.x === 'min')) {
             this.onBorder = 'right';
             this.setValue('dishesX', -this.maxShift);
