@@ -137,7 +137,8 @@ export const dishesExapmleComp = {
         return {
             onBorder: 'left',
             isDrag: false,
-            maxShift: 0
+            maxShift: 0,
+            touchX: null
         }
     },
     template: `
@@ -148,6 +149,10 @@ export const dishesExapmleComp = {
                 v-on:mouseup="removeListener"
                 v-on:mouseleave="removeListener"
                 v-on:mousemove="move"
+                v-on:touchstart="addListener"
+                v-on:touchend="removeListener"
+                v-on:touchcancel="removeListener"
+                v-on:touchmove="touchmove"
             >
                 <div class="pics" v-bind:style="transformation" :class="{ smooth: !isDrag }">
                     <dish-example
@@ -199,8 +204,29 @@ export const dishesExapmleComp = {
                 this.setValue('dishesX', newX);
             }
         },
-        addListener: function() {
+        touchmove: function(e) {
+            if (this.isDrag) {
+                e.preventDefault();
+                const diffX = e.targetTouches[0].screenX - this.touchX;
+                let newX = this.x + diffX;
+                if (newX > 0) {
+                    newX = 0;
+                    this.onBorder = 'left';
+                } else if (Math.abs(newX) > this.maxShift) {
+                    newX = -this.maxShift;
+                    this.onBorder = 'right';
+                } else {
+                    this.onBorder = null;
+                }
+                this.setValue('dishesX', newX);
+                this.touchX = e.targetTouches[0].screenX;
+            }
+        },
+        addListener: function(e) {
             this.isDrag = true;
+            if (e.targetTouches && e.targetTouches[0]) {
+                this.touchX = e.targetTouches[0].screenX;
+            }
         },
         removeListener: function() {
             this.isDrag = false;

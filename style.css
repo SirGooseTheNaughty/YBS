@@ -566,7 +566,6 @@ p {
   background-color: var(--promoPicBg__bad);
 }
 .promo__status {
-  height: 14px;
   margin-top: 8px;
   font-size: 12px;
   text-align: center;
@@ -583,12 +582,14 @@ p {
 }
 .pre-cart {
   font-size: 13px;
+  width: 100%;
 }
 .pre-cart__item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 0 0 7px 0;
+  min-width: max-content;
 }
 .pre-cart__item .cross {
   width: 20px;
@@ -757,10 +758,6 @@ p {
   .dishPopup__icon {
     opacity: 1;
   }
-  .dishPicCont {
-    width: 134px;
-    height: 101px;
-  }
   .days {
     margin-bottom: 32px;
   }
@@ -810,7 +807,7 @@ p {
   }
   .right {
     background-color: var(--mainColor);
-    padding-top: 32px;
+    padding-top: 41px;
     padding-bottom: 54px;
     border-bottom-left-radius: 15px;
     border-top-right-radius: 0;
@@ -822,22 +819,25 @@ p {
     margin-top: 32px;
     margin-bottom: 0;
     grid-area: third;
+    flex-wrap: nowrap;
   } 
   .daySwitch .button {
     width: 28px;
     height: 28px;
   }
-  .dish:first-child {
-    margin-right: 17px;
-    margin-bottom: 22px;
-  }
   .dish {
     height: 47px;
     width: 127 px;
+    margin-right: 7px;
+    margin-bottom: 22px;
+  }
+  .dish:first-child {
+    margin-right: 7px;
+    margin-bottom: 22px;
   }
   .dessert {
     height: 51px;
-    margin-bottom: 41px;
+    margin-bottom: 0;
   }
   .dessert p {
     font-size: 16px;
@@ -853,10 +853,6 @@ p {
   }
   .pic {
     height: 124px;
-  }
-  .dishPicCont {
-    width: 160px;
-    height: 122px;
   }
   .nutritionAndLink {
     grid-area: second;
@@ -910,6 +906,7 @@ p {
   }
   .right {
     padding-bottom: 48px;
+    padding-top: 32px;
   }
   .tabs {
     height: 52px;
@@ -926,12 +923,18 @@ p {
   .dish:first-child {
     margin-right: 21px;
   }
+  .numDishes {
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
   .dish {
     width: 190px;
     height: 54px;
+    margin: 0;
   }
-  .dessert {
-    margin-bottom: 32px;
+  .dish:first-child {
+    margin-right: 21px;
+    margin-bottom: 20px;
   }
   .menuSampleCont {
     grid-template-rows: 35px 1fr;
@@ -944,10 +947,6 @@ p {
   }
   .pic {
     height: 97px;
-  }
-  .dishPicCont {
-    width: 124px;
-    height: 95px;
   }
   .nutrition {
     font-size: 16px;
@@ -1028,18 +1027,16 @@ p {
   .numDishes {
     margin-bottom: 17px;
   }
-  .dish:first-child {
-    margin-right: 11px;
-    margin-bottom: 17px;
-  }
-  .dish:last-child {
-    margin-bottom: 0;
-  }
   .dish {
     width: 122px;
     height: 39px;
     font-size: 14px;
     line-height: 1.2em;
+    margin: 0;
+  }
+  .dish:first-child {
+    margin-right: 6px;
+    margin-bottom: 16px;
   }
   .dish.hit::after {
     top: 0;
@@ -1051,7 +1048,7 @@ p {
     font-size: 12px;
   }
   .dessert {
-    height: 46px;
+    height: 48px;
     margin-bottom: 29px;
   }
   .dessert p {
@@ -1079,9 +1076,9 @@ p {
     grid-gap: 16px 15px;
     padding-top: 23px;
   }
-  .dishPicCont {
-    width: 126px;
-    height: 97px;
+  .dishPicCont .pic {
+    max-width: 175px;
+    height: 131px;
   }
   .daySwitch {
     width: 220px;
@@ -1101,6 +1098,12 @@ p {
   }
   .nutrition .text {
     font-weight: bolder;
+  }
+  .question {
+    margin-bottom: 15px;
+  }
+  .days {
+    margin-bottom: 25px;
   }
   .day,
   .numDays {
