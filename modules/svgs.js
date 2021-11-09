@@ -108,3 +108,15 @@ export const preCardPlus = `
         <path d="M10.6818 6L5.50001 6L0.318187 6" stroke="#F3EDE5" stroke-width="1.5"/>
     </svg>
 `;
+
+export const picsLoader = `
+    <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M49 25C49 30.5525 47.0747 35.9333 43.5523 40.2254C40.0298 44.5176 35.128 47.4556 29.6822 48.5388C24.2363 49.6221 18.5834 48.7836 13.6865 46.1661C8.78959 43.5487 4.95175 39.3143 2.82689 34.1844C0.702032 29.0545 0.421618 23.3466 2.03343 18.0332C3.64524 12.7197 7.04956 8.12955 11.6663 5.04473C16.2831 1.95991 21.8266 0.571324 27.3524 1.11557C32.8782 1.65981 38.0443 4.10321 41.9706 8.02943" stroke="url(#paint0_angular_890:43)" stroke-opacity="0.75" stroke-width="2"/>
+        <defs>
+            <radialGradient id="paint0_angular_890:43" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(25 25) scale(27.2727)">
+                <stop stop-color="white" stop-opacity="0"/>
+                <stop offset="1" stop-color="white"/>
+            </radialGradient>
+        </defs>
+    </svg>
+`;

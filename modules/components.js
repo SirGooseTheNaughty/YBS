@@ -1,4 +1,4 @@
-import { taglinePics, daySwitchArrow, promocodePics, popupIcon, dessertPlus, dishExampleArrow, preCartItemCross, preCardPlus } from './svgs.js';
+import { taglinePics, daySwitchArrow, promocodePics, popupIcon, dessertPlus, dishExampleArrow, preCartItemCross, preCardPlus, picsLoader } from './svgs.js';
 import { taglineTexts, daysTexts, promoResultsTexts, dessertLines, dict } from "./data.js";
 import { pricesData } from './prices.js';
 import { getPromocodeResults } from './service.js';
@@ -156,7 +156,8 @@ export const dishesExapmleComp = {
                 v-on:touchcancel="removeListener"
                 v-on:touchmove="touchmove"
             >
-                <div class="pics" v-bind:style="transformation" :class="{ smooth: !isDrag }">
+                <div v-if="!dishes.length" class="pics__loader">${picsLoader}</div>
+                <div v-if="dishes.length" class="pics" v-bind:style="transformation" :class="{ smooth: !isDrag }">
                     <dish-example
                         v-for="dish in dishes"
                         :set-value="setValue"

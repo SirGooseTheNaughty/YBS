@@ -336,6 +336,19 @@ p {
   right: 0;
   transform: translate(25%, -25%);
 }
+.pics__loader {
+  width: 100%;
+  height: 185px;
+  display: grid;
+  place-items: center;
+}
+.pics__loader svg {
+  animation: loader-spin 1s linear infinite forwards;
+}
+@keyframes loader-spin {
+  from { transform: rotate(0) }
+  to { transform: rotate(360deg) }
+}
 .pics {
   display: flex;
   column-gap: 18px;
@@ -1063,6 +1076,9 @@ p {
       "button";
     margin-bottom: 21px;
     place-items: center center;
+  }
+  .pics__loader {
+    height: 155px;
   }
   .pics {
     grid-template-columns: repeat(2, 1fr);
