@@ -369,7 +369,7 @@ p {
 }
 .dishPicCont {
   position: relative;
-  margin-right: 14px;
+  margin-right: 6px;
 }
 .dishPicCont:last-child {
   margin-right: 0;
@@ -1088,8 +1088,8 @@ p {
     grid-gap: 16px 15px;
     padding-top: 23px;
   }
-  .dishPicCont .pic {
-    max-width: 175px;
+  .pic {
+    min-width: 175px;
     height: 131px;
   }
   .daySwitch {
