@@ -991,7 +991,7 @@ p {
 @media screen and (max-width: 480px) {
   .content {
     grid-template-rows: 45px 1fr auto;
-    grid-template-columns: 300px;
+    grid-template-columns: calc(100vw - 20px);
   }
   .left,
   .right {
@@ -1034,7 +1034,7 @@ p {
     margin-bottom: 17px;
   }
   .dish {
-    width: 122px;
+    width: 48%;
     height: 39px;
     font-size: 14px;
     line-height: 1.2em;
