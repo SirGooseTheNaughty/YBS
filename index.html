@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <div id="app" class="configurator" v-on:touchstart="hidePopup" :data-mobile-safari="isMobileSafari">
+    <div id="app" class="configurator" :class="{ mobileSafari: isMobileSafari}" v-on:touchstart="hidePopup">
         <div class="content" :data-tab="tab">
             <div class="tabs">
                 <tab class="tabHome" title="Домашняя" value="home" :get-is-active="isActive" :set-value="setParameter"></tab>
