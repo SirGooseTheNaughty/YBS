@@ -119,8 +119,9 @@ export const dishExampleComp = {
     },
     methods: {
         showPopup: function(e) {
+            e.stopPropagation();
             const { x, y, width, right } = e.target.getBoundingClientRect();
-            const xWithCheck = right + 190 > $(window).width() ? x : x + width;
+            const xWithCheck = right + 190 > $(window).width() ? x - 190 : x + width;
             this.setValue('dishPopupInfo', this.dishData.name, 'name');
             this.setValue('dishPopupInfo', this.dishData.weight, 'weight');
             this.setValue('dishPopupInfo', this.dishData.text, 'text');

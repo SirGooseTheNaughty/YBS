@@ -78,6 +78,7 @@ export const appComp = {
         checkout: function() {
             checkout(this);
         },
+        hidePopup: function() { this.dishPopupInfo.isShown = false; }
     },
     computed: {
         currentDishes: function() {
