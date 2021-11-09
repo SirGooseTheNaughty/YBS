@@ -351,7 +351,6 @@ p {
 }
 .pics {
   display: flex;
-  column-gap: 18px;
   padding-top: 20px;
   box-sizing: border-box;
   cursor: grab;
@@ -370,6 +369,10 @@ p {
 }
 .dishPicCont {
   position: relative;
+  margin-right: 14px;
+}
+.dishPicCont:last-child {
+  margin-right: 0;
 }
 .dishPopup__icon {
   position: absolute;
