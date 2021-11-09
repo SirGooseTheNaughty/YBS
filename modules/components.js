@@ -119,12 +119,13 @@ export const dishExampleComp = {
     },
     methods: {
         showPopup: function(e) {
-            const { x, y, width, height } = e.target.getBoundingClientRect();
+            const { x, y, width, right } = e.target.getBoundingClientRect();
+            const xWithCheck = right + 190 > $(window).width() ? x : x + width;
             this.setValue('dishPopupInfo', this.dishData.name, 'name');
             this.setValue('dishPopupInfo', this.dishData.weight, 'weight');
             this.setValue('dishPopupInfo', this.dishData.text, 'text');
-            this.setValue('dishPopupInfo', x + width, 'x');
-            this.setValue('dishPopupInfo', y + height, 'y');
+            this.setValue('dishPopupInfo', xWithCheck, 'x');
+            this.setValue('dishPopupInfo', y, 'y');
             this.setValue('dishPopupInfo', true, 'isShown');
         },
         hidePopup: function() { this.setValue('dishPopupInfo', false, 'isShown'); }
