@@ -163,7 +163,7 @@ p {
   line-height: 0.9em;
   box-sizing: border-box;
   cursor: pointer;
-  margin-right: 20px;
+  margin-right: 9px;
   transition: background-color var(--animation-time-short), color var(--animation-time-short);
 }
 .dish:last-child {

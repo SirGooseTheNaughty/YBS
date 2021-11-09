@@ -67,6 +67,11 @@ export const dessertComp = {
     methods: {
         toggle: function() {
             this.setValue('isDessertAdded', !this.isAdded);
+            if (!this.isAdded) {
+                this.setValue('dishesX', 'max');
+            } else {
+                this.setValue('dishesX', 'min');
+            }
         }
     }
 }
@@ -174,6 +179,10 @@ export const dishesExapmleComp = {
         if (allElements.length) {
             const lastElement = allElements[allElements.length - 1];
             this.maxShift = lastElement.offsetLeft + lastElement.offsetWidth - this.$refs.cont.offsetWidth;
+        }
+        if (this.x === 'max' || (this.onBorder === 'right' && this.x === 'min')) {
+            this.onBorder = 'right';
+            this.setValue('dishesX', -this.maxShift);
         }
     },
     computed: {
