@@ -1000,7 +1000,7 @@ p {
     padding-right: 16px;
   }
   .right {
-    padding-top: 40px;
+    padding-top: 29px;
   }
   .tagline {
     flex-flow: row-reverse;
@@ -1056,7 +1056,6 @@ p {
   }
   .dessert {
     height: 48px;
-    margin-bottom: 29px;
   }
   .dessert p {
     font-size: 14px;
@@ -1126,7 +1125,10 @@ p {
     flex-flow: column;
   }
   .numDaysSelect {
-    margin-bottom: 36px;
+    margin-bottom: 20px;
+  }
+  .promo {
+    margin-bottom: 23px;
   }
   .paymentMethod,
   .phone {
