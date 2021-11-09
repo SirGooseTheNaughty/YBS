@@ -90,7 +90,7 @@ export function connectBasket(context) {
 }
 
 export function checkout (context) {
-    const { tab, payment, phone, price, promocode, promocodeResults: { discount } } = context;
+    const { tab, payment, phone, price, promocodeResults: { discount, promocode } } = context;
     context.basket.price.innerHTML = '' + price;
     context.basket.phone.value = phone;
     if (discount) {
