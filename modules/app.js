@@ -103,12 +103,10 @@ export const appComp = {
             if (!this.promocodeResults.discount && this.savedConfigs.length) {
                 price = Math.floor(0.9 * price);
             }
-            let priceArr = String(price).split('');
-            priceArr.splice(priceArr.length - 3, 0, ' ');
             return {
                 price,
                 profit,
-                textPrice: `${priceArr.join('')} р`,
+                textPrice: `${price}р`,
                 textProfit: `Ваша выгода — ${profit} р/день`
             }
         },

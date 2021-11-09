@@ -589,7 +589,7 @@ p {
   justify-content: space-between;
   align-items: center;
   margin: 0 0 7px 0;
-  min-width: max-content;
+  word-break: keep-all;
 }
 .pre-cart__item .cross {
   width: 20px;
@@ -851,9 +851,6 @@ p {
     grid-template-rows: 122px;
     grid-gap: 20px 18px;
   }
-  .pic {
-    height: 124px;
-  }
   .nutritionAndLink {
     grid-area: second;
   }
@@ -944,9 +941,6 @@ p {
     grid-template-rows: 95px;
     grid-gap: 16px 14px;
     padding-top: 22px;
-  }
-  .pic {
-    height: 97px;
   }
   .nutrition {
     font-size: 16px;
