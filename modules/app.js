@@ -79,7 +79,7 @@ export const appComp = {
                 this.numDishes = config.numDishes;
                 this.numDays = config.numDays;
                 this.tab = config.tab;
-                this.tab = config.tab;
+                this.isDessertAdded = config.isDessertAdded;
                 this.savedConfigs.splice(this.savedConfigs.length - 1, 1);
             } else {
                 this.savedConfigs.splice(index, 1);
