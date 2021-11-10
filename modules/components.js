@@ -456,7 +456,7 @@ export const preCartComp = {
                 :key="configKey"
                 :delete-config="deleteConfig"
             ></pre-cart-item>
-            <pre-cart-item :text="currentText" key="current"></pre-cart-item>
+            <pre-cart-item :text="currentText" key="current" :delete-config="deleteCurrent"></pre-cart-item>
             <div class="pre-cart__add" v-on:click="addConfig">
                 <div class="plus">${preCardPlus}</div>
                 <p>Добавить рацион</p>
@@ -473,6 +473,12 @@ export const preCartComp = {
         },
         configKey: function() {
             return JSON.stringify(this.config);
+        },
+        deleteCurrent: function() {
+            if (this.savedConfigs.length) {
+                return () => this.deleteConfig('current');
+            }
+            return null
         }
     },
     methods: {

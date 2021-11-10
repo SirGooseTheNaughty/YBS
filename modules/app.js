@@ -73,7 +73,17 @@ export const appComp = {
             }
         },
         deleteConfig: function(index) {
-            this.savedConfigs.splice(index, 1);
+            if (index === 'current') {
+                const config = this.savedConfigs[this.savedConfigs.length - 1];
+                this.tab = config.tab;
+                this.numDishes = config.numDishes;
+                this.numDays = config.numDays;
+                this.tab = config.tab;
+                this.tab = config.tab;
+                this.savedConfigs.splice(this.savedConfigs.length - 1, 1);
+            } else {
+                this.savedConfigs.splice(index, 1);
+            }
         },
         connectBasket: function() {
             connectBasket(this);
