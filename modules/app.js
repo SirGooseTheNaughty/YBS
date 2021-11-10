@@ -68,6 +68,9 @@ export const appComp = {
                 isDessertAdded: this.isDessertAdded,
                 price: this.price,
             });
+            if (this.isMobile) {
+                $('html, body').animate({scrollTop: $("#app").offset().top}, 250);
+            }
         },
         deleteConfig: function(index) {
             this.savedConfigs.splice(index, 1);
@@ -160,11 +163,12 @@ export const appComp = {
             });
             return link(configs);
         },
+        isMobile: function() {
+            return /Mobi/i.test(window.navigator.userAgent);
+        },
         isMobileSafari: function() {
-            const agent = window.navigator.userAgent;
-            const isSafari = agent.indexOf("Safari") > -1;
-            const isMobile = /Mobi/i.test(agent);
-            return isMobile && isSafari;
+            const isSafari = window.navigator.userAgent.indexOf("Safari") > -1;
+            return this.isMobile && isSafari;
         }
     }
 };
