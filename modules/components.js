@@ -428,7 +428,7 @@ export const promocodeInputComp = {
             return text || '';
         },
         placeholder: function() {
-            return this.savedConfigs.length ? 'ДВА РАЦИОНА' : 'Введите промокод';
+            return this.savedConfigs.length ? 'ДВАРАЦИОНА' : 'Введите промокод';
         }
     }
 }
