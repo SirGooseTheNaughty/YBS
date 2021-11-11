@@ -373,7 +373,7 @@ export const promocodeInputComp = {
                 class="promocode"
                 :class="{ 'bad': resultStatus === 'bad' }"
                 type="text"
-                placeholder="Введите промокод"
+                :placeholder="placeholder"
                 v-on:input="inputPromocode"
                 v-on:keydown="promocodeKeydown"
             ></input>
@@ -426,6 +426,9 @@ export const promocodeInputComp = {
                 return text(this.promocodeResults.type, this.promocodeResults.discount);
             }
             return text || '';
+        },
+        placeholder: function() {
+            return this.savedConfigs.length ? 'ДВА РАЦИОНА' : 'Введите промокод';
         }
     }
 }
