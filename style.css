@@ -586,7 +586,8 @@ p {
 .promo.ok .promo__pic {
   background-color: var(--promoPicBg__ok);
 }
-.promo.bad .promo__pic {
+.promo.bad .promo__pic,
+.promo.strict .promo__pic {
   background-color: var(--promoPicBg__bad);
 }
 .promo__status {
@@ -601,7 +602,8 @@ p {
 .promo.ok .promo__status {
   color: var(--promoPicBg__ok);
 }
-.promo.bad .promo__status {
+.promo.bad .promo__status,
+.promo.strict .promo__status {
   color: var(--promoPicBg__bad);
 }
 .pre-cart {

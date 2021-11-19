@@ -53,10 +53,26 @@
                 </div>
                 <div class="question q-numDays">Количество дней</div>
                 <div class="numDaysSelect">
-                    <num-days value="5" :tab="tab" :num-dishes="numDishes" :days-selection="daysSelection" :get-is-active="isActive" :set-value="setParameter"></num-days>
-                    <num-days value="20" :tab="tab" :num-dishes="numDishes" :days-selection="daysSelection" :get-is-active="isActive" :set-value="setParameter"></num-days>
+                    <num-days
+                        value="5"
+                        :tab="tab"
+                        :num-dishes="numDishes"
+                        :days-selection="daysSelection"
+                        :get-is-active="isActive"
+                        :set-value="setParameter"
+                        :is-dessert-added="isDessertAdded"
+                    ></num-days>
+                    <num-days
+                        value="20"
+                        :tab="tab"
+                        :num-dishes="numDishes"
+                        :days-selection="daysSelection"
+                        :get-is-active="isActive"
+                        :set-value="setParameter"
+                        :is-dessert-added="isDessertAdded"
+                    ></num-days>
                 </div>
-                <promocode :set-value="setParameter" :promocode-results="promocodeResults" :saved-configs="savedConfigs"></promocode>
+                <promocode :set-value="setParameter" :promocode-results="promocodeResults" :saved-configs="savedConfigs" :check-promocode="checkPromocodeInternally"></promocode>
                 <pre-cart
                     :tab="tab"
                     :is-dessert-added="isDessertAdded"
@@ -105,6 +121,15 @@
         };
         const basketId = '';
         const preventOrder = true;
+        const promoValues = [
+            {
+                codes: ['СПАСИБО'],
+                menu: '',
+                numDishes: '',
+                daysSelection: '',
+                numDays: '5',
+            }
+        ];
     </script>
     
     <script src="./scripts/dishesInfo.js"></script>

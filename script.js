@@ -63,3 +63,8 @@ try {
         globalApp.setParameter('basket', true, 'preventOrder');
     }
 } catch(e) {}
+try {
+    if (promoValues) {
+        globalApp.setParameter('promoValues', promoValues);
+    }
+} catch(e) {}

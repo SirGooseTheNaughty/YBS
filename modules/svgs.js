@@ -72,6 +72,11 @@ export const promocodePics = {
         <circle cx="14" cy="2" r="2" fill="#F2F2F2"/>
         <path d="M1 14C1 14 2.88889 8 9.31111 8C15.7333 8 18 14 18 14" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>`,
+    strict: `<svg width="19" height="15" viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="5" cy="2" r="2" fill="#F2F2F2"/>
+        <circle cx="14" cy="2" r="2" fill="#F2F2F2"/>
+        <path d="M1 14C1 14 2.88889 8 9.31111 8C15.7333 8 18 14 18 14" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`,
     loading: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M21.5263 6.49991C24.5639 11.7611 22.7613 18.4886 17.5 21.5262C12.2388 24.5638 5.51132 22.7611 2.47375 17.4999C-0.563811 12.2387 1.23882 5.5112 6.50003 2.47363C11.7613 -0.563933 18.4887 1.23869 21.5263 6.49991ZM5.23488 15.9058C7.39203 19.6421 12.1696 20.9222 15.9059 18.7651C19.6422 16.6079 20.9223 11.8303 18.7652 8.09405C16.608 4.35776 11.8305 3.07761 8.09417 5.23476C4.35788 7.39191 3.07774 12.1695 5.23488 15.9058Z" fill="url(#paint0_linear)"/>
         <defs>

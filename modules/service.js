@@ -52,7 +52,7 @@ async function fetchPromocode (code) {
 
 export async function getPromocodeResults (promocode) {
     const promoResult = {status: null, type: null, discount: null};
-    const res = await fetchPromocode (promocode);
+    const res = await fetchPromocode(promocode);
         if (res.message === 'OK') {
             promoResult.status = 'ok';
             if (res.discountpercent) {
@@ -66,6 +66,36 @@ export async function getPromocodeResults (promocode) {
             promoResult.status = 'bad';
         }
     return promoResult;
+}
+
+export function checkPromocodeInternally(context, promocode) {
+    const isPromocodeStricted = context.promoValues.findIndex(code => code.codes.map(code => code.toLowerCase()).includes(promocode)) !== -1;
+    if (!isPromocodeStricted) {
+        return true;
+    }
+    const validPromocodes = context.promoValues.filter(value => {
+        const { menu, numDishes, daysSelection, numDays, codes } = value;
+        if (menu && menu !== context.tab) {
+            return false;
+        }
+        if (numDishes && numDishes !== context.numDishes) {
+            return false;
+        }
+        if (daysSelection && daysSelection !== context.daysSelection) {
+            return false;
+        }
+        if (numDays && numDays !== context.numDays) {
+            return false;
+        }
+        if (!codes.map(code => code.toLowerCase()).includes(promocode)) {
+            return false;
+        }
+        return true;
+    });
+    if (validPromocodes.length) {
+        return true;
+    }
+    return false;
 }
 
 export function connectBasket(context) {

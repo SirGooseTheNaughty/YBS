@@ -26,6 +26,7 @@ export const daysTexts = {
 export const promoResultsTexts = {
     ok: (type, discount) => `Ваша скидка: ${discount}${type === 'sum' ? 'р' : '%'}`,
     bad: 'Не удалось применить данный промокод',
+    strict: 'Этот промокод не применим к данной конфигурации меню',
     special: 'Применена скидка 10% на дополнительные рационы'
 };
 export const dessertLines = {

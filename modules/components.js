@@ -328,7 +328,7 @@ export const daysSelectionComp = {
 }
 
 export const numDaysComp = {
-    props: ['value', 'tab', 'num-dishes', 'days-selection', 'get-is-active', 'set-value'],
+    props: ['value', 'tab', 'num-dishes', 'days-selection', 'get-is-active', 'set-value', 'is-dessert-added'],
     template: `
         <div class="numDays" :class="{ active: isActive }" v-on:click="onClick">
             <span class="numDay">{{ numDays }}</span>
@@ -354,14 +354,18 @@ export const numDaysComp = {
             this.setValue('numDays', this.value);
         },
         getOneDayPrice: function(days) {
-            const price = pricesData[this.tab][this.numDishes][this.daysSelection][this.value]
-            return Math.floor((Number(price) / days));
+            const wholePrice = pricesData[this.tab][this.numDishes][this.daysSelection][this.value];
+            let dayPrice = Math.floor((Number(wholePrice) / days));
+            if (this.isDessertAdded) {
+                dayPrice += 100;
+            }
+            return dayPrice;
         }
     }
 }
 
 export const promocodeInputComp = {
-    props: ['set-value', 'promocode-results', 'saved-configs'],
+    props: ['set-value', 'promocode-results', 'saved-configs', 'check-promocode'],
     data() {
         return {
             promocode: ''
@@ -371,7 +375,7 @@ export const promocodeInputComp = {
         <div class="promo enter" :class="resultStatus">
             <input
                 class="promocode"
-                :class="{ 'bad': resultStatus === 'bad' }"
+                :class="{ 'bad': resultStatus === 'bad' || resultStatus === 'strict' }"
                 type="text"
                 :placeholder="placeholder"
                 v-on:input="inputPromocode"
@@ -399,14 +403,20 @@ export const promocodeInputComp = {
         enterPromocode: async function () {
             this.status = 'loading';
             this.setValue('promocodeResults', 'loading', 'status');
-            const promoRes = await getPromocodeResults(this.promocode);
-            this.setValue('promocodeResults', promoRes.status, 'status');
-            this.setValue('promocodeResults', promoRes.type, 'type');
-            this.setValue('promocodeResults', promoRes.discount, 'discount');
-            if (promoRes.status === 'ok') {
-                this.setValue('promocodeResults', this.promocode, 'promocode');
+            const isValid = this.checkPromocode(this.promocode);
+            if (isValid) {
+                const promoRes = await getPromocodeResults(this.promocode);
+                this.setValue('promocodeResults', promoRes.status, 'status');
+                this.setValue('promocodeResults', promoRes.type, 'type');
+                this.setValue('promocodeResults', promoRes.discount, 'discount');
+                if (promoRes.status === 'ok') {
+                    this.setValue('promocodeResults', this.promocode, 'promocode');
+                } else {
+                    this.setValue('promocodeResults', null, 'promocode');
+                }
             } else {
                 this.setValue('promocodeResults', null, 'promocode');
+                this.setValue('promocodeResults', 'strict', 'status');
             }
         },
     },

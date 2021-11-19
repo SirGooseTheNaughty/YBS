@@ -1,7 +1,7 @@
 // import { fetchQuestions, preformResults, fetchResults } from './functions.js';
 // import { loadCookies, saveCookies, unloadListener, showResults } from './utils.js';
 // import { colorSchemes } from "./data.js";
-import { fetchData, connectBasket, checkout } from './service.js';
+import { fetchData, connectBasket, checkout, checkPromocodeInternally } from './service.js';
 import { pricesData } from './prices.js';
 import { dict } from './data.js';
 
@@ -35,6 +35,7 @@ export const appComp = {
             },
             menuLinks: {home: '#home', lite: '#lite', avan: '#avan'},
             dishesX: 0,
+            promoValues: [],
             basket: { selector: '', price: null, phone: null, cashBtn: null, cardBtn: null, productsCont: null, promoInput: null, promoBtn: null, submitBtn: null, preventOrder: false }
         }
     },
@@ -91,7 +92,8 @@ export const appComp = {
         checkout: function() {
             checkout(this);
         },
-        hidePopup: function() { this.dishPopupInfo.isShown = false; }
+        hidePopup: function() { this.dishPopupInfo.isShown = false; },
+        checkPromocodeInternally: function(promocode) { return checkPromocodeInternally(this, promocode) }
     },
     computed: {
         currentDishes: function() {
@@ -112,7 +114,21 @@ export const appComp = {
                 profit = 4 * pricesForDiffDays['5'] - pricesForDiffDays['20'];
             }
             if (this.isDessertAdded) {
-                price += 100;
+                let numDays = 5;
+                if (this.numDays === '5') {
+                    if (this.daysSelection === 'work') {
+                        numDays = 5;
+                    } else {
+                        numDays = 7;
+                    }
+                } else {
+                    if (this.daysSelection === 'work') {
+                        numDays = 20;
+                    } else {
+                        numDays = 28;
+                    }
+                }
+                price += 100 * numDays;
             }
             if (!this.promocodeResults.discount && this.savedConfigs.length) {
                 price = Math.floor(0.9 * price);
