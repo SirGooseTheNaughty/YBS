@@ -33,6 +33,7 @@ export const appComp = {
                 x: 0,
                 y: 0
             },
+            prices: pricesData,
             menuLinks: {home: '#home', lite: '#lite', avan: '#avan'},
             dishesX: 0,
             promoValues: [],
@@ -107,7 +108,7 @@ export const appComp = {
             return dishes;
         },
         price: function() {
-            const pricesForDiffDays = pricesData[this.tab][this.numDishes][this.daysSelection];
+            const pricesForDiffDays = this.prices[this.tab][this.numDishes][this.daysSelection];
             let price = pricesForDiffDays[this.numDays];
             let profit;
             if (this.numDays === '20') {

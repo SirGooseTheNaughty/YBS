@@ -56,20 +56,20 @@
                     <num-days
                         value="5"
                         :tab="tab"
-                        :num-dishes="numDishes"
                         :days-selection="daysSelection"
                         :get-is-active="isActive"
                         :set-value="setParameter"
                         :is-dessert-added="isDessertAdded"
+                        :price="prices[tab][numDishes][daysSelection][5]"
                     ></num-days>
                     <num-days
                         value="20"
                         :tab="tab"
-                        :num-dishes="numDishes"
                         :days-selection="daysSelection"
                         :get-is-active="isActive"
                         :set-value="setParameter"
                         :is-dessert-added="isDessertAdded"
+                        :price="prices[tab][numDishes][daysSelection][20]"
                     ></num-days>
                 </div>
                 <promocode :set-value="setParameter" :promocode-results="promocodeResults" :saved-configs="savedConfigs" :check-promocode="checkPromocodeInternally"></promocode>
@@ -109,7 +109,9 @@
     </div>
     
     
-    
+    <script src="./scripts/newPrices.js"></script>
+    <script src="./scripts/dishesInfo.js"></script>
+
     <script>
         let globalApp = true;
         const projectId = '2857002';
@@ -131,8 +133,6 @@
             }
         ];
     </script>
-    
-    <script src="./scripts/dishesInfo.js"></script>
     <script src="./scripts/jquery.inputmask.min.js"></script>
     <script type="module" src="./script.js"></script>
 </body>

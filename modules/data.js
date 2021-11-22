@@ -30,7 +30,7 @@ export const promoResultsTexts = {
     special: 'Применена скидка 10% на дополнительные рационы'
 };
 export const dessertLines = {
-    add: 'Добавить десерт',
+    add: 'Добавить десерт (100 р/день)',
     remove: 'Убрать десерт'
 };
 export const dict = {

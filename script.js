@@ -68,3 +68,8 @@ try {
         globalApp.setParameter('promoValues', promoValues);
     }
 } catch(e) {}
+try {
+    if (pricesData) {
+        globalApp.setParameter('prices', pricesData);
+    }
+} catch(e) {}

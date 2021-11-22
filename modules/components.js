@@ -1,6 +1,5 @@
 import { taglinePics, daySwitchArrow, promocodePics, popupIcon, dessertPlus, dishExampleArrow, preCartItemCross, preCardPlus, picsLoader } from './svgs.js';
 import { taglineTexts, daysTexts, promoResultsTexts, dessertLines, dict } from "./data.js";
-import { pricesData } from './prices.js';
 import { getPromocodeResults } from './service.js';
 import { nutritionValues } from './nutritionData.js';
 
@@ -328,7 +327,7 @@ export const daysSelectionComp = {
 }
 
 export const numDaysComp = {
-    props: ['value', 'tab', 'num-dishes', 'days-selection', 'get-is-active', 'set-value', 'is-dessert-added'],
+    props: ['value', 'tab', 'days-selection', 'get-is-active', 'set-value', 'is-dessert-added', 'price'],
     template: `
         <div class="numDays" :class="{ active: isActive }" v-on:click="onClick">
             <span class="numDay">{{ numDays }}</span>
@@ -354,8 +353,7 @@ export const numDaysComp = {
             this.setValue('numDays', this.value);
         },
         getOneDayPrice: function(days) {
-            const wholePrice = pricesData[this.tab][this.numDishes][this.daysSelection][this.value];
-            let dayPrice = Math.floor((Number(wholePrice) / days));
+            let dayPrice = Math.floor((Number(this.price) / days));
             if (this.isDessertAdded) {
                 dayPrice += 100;
             }
