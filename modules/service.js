@@ -23,7 +23,8 @@ export async function fetchData () {
             return {
                 menu,
                 day: Number(day) - 1,
-                index: index === 'dessert' ? 'dessert' : Number(index) - 1,
+                index: isNaN(index) ? index : Number(index) - 1,
+                drinkOptions: index === 'drink' ? dish.text.split('; ') : null,
                 name: dish.descr,
                 picUrl,
                 text: dish.text,

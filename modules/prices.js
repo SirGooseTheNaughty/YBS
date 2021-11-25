@@ -124,5 +124,7 @@ export const pricesData = {
                 '20': 24000
             }
         }
-    }
+    },
+    dessert: 100,
+    drink: 50,
 };

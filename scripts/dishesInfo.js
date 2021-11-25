@@ -789,6 +789,7 @@ const getMockedData = () => {
             prefomedInfo.push({
                 ...dish,
                 picUrl: tildaPicUrl,
+                drinkOptions: null,
                 menu,
                 day: i,
                 index: j === day.length - 1 ? 'dessert' : j,
@@ -805,5 +806,13 @@ const getMockedData = () => {
     dishesInfo.home.forEach((day, i) => pushToInfo('home', day, i));
     dishesInfo.lite.forEach((day, i) => pushToInfo('lite', day, i));
     dishesInfo.avan.forEach((day, i) => pushToInfo('avan', day, i));
+    prefomedInfo.push({
+        name: 'Один или несколько на выбор:',
+        drinkOptions: ['Морс чёрная смородина', 'Морс облепиховый', 'Компот из сухофруктов'],
+        picUrl: tildaPicUrl,
+        menu: 'all',
+        day: 'all',
+        index: 'drink',
+    });
     return prefomedInfo;
 }

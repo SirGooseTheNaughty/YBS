@@ -6,7 +6,7 @@ import {
     tabComp, 
     tagLineComp, 
     numDishesComp,
-    dessertComp,
+    additiveComp,
     nutritionComp,
     daySwitchComp, 
     daysSelectionComp, 
@@ -24,7 +24,7 @@ import {
 Vue.component('tab', tabComp);
 Vue.component('tagline', tagLineComp);
 Vue.component('num-dishes', numDishesComp);
-Vue.component('dessert', dessertComp);
+Vue.component('additive', additiveComp);
 Vue.component('nutrition', nutritionComp);
 Vue.component('day-switch', daySwitchComp);
 Vue.component('dishes-example', dishesExapmleComp);

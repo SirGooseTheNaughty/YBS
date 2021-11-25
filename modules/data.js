@@ -29,9 +29,9 @@ export const promoResultsTexts = {
     strict: 'Этот промокод не применим к данной конфигурации меню',
     special: 'Применена скидка 10% на дополнительные рационы'
 };
-export const dessertLines = {
-    add: 'Добавить десерт (100 р/день)',
-    remove: 'Убрать десерт'
+export const additiveLines = {
+    add: 'Добавить ',
+    remove: 'Убрать '
 };
 export const dict = {
     menus: {

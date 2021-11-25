@@ -9,12 +9,15 @@ export const appComp = {
     el: '#app',
     data() {
         return {
-            tab: 'home',    // home / lite / avan
-            numDishes: '5',
-            isDessertAdded: false,
+            configuration: {
+                tab: 'home',    // home / lite / avan
+                numDishes: '5',
+                daysSelection: 'work',
+                numDays: '20',
+                isDessertAdded: false,
+                isDrinkAdded: false,
+            },
             day: 0,
-            daysSelection: 'work',
-            numDays: '20',
             promocodeResults: {
                 promocode: '',
                 status: 'ready',
@@ -25,11 +28,13 @@ export const appComp = {
             phone: '',
             savedConfigs: [],
             dishesData: [],
+            drinkData: null,
             dishPopupInfo: {
                 isShown: false,
                 name: '',
                 weight: 0,
                 text: '',
+                drinkData: null,
                 x: 0,
                 y: 0
             },
@@ -43,7 +48,8 @@ export const appComp = {
     async mounted() {
         const dishesData = await fetchData();
         this.dishesData = dishesData.length ? dishesData : getMockedData();
-        console.log(this.dishesData);
+        this.drinkData = this.dishesData.find(dish => dish.index === 'drink');
+        console.log(this.dishesData, this.drinkData);
     },
     watch: {
         numDishes: function() {
@@ -58,16 +64,31 @@ export const appComp = {
                 this[parameter] = value;
             }
         },
-        isActive: function(parameter, value) {
-            return this[parameter] === value;
+        isActive: function(parameter, value, subParameter = null) {
+            if (subParameter) {
+                return this[parameter][subParameter] === value;
+            } else {
+                return this[parameter] === value;
+            }
+        },
+        getNumericNumDays: function(numDays, daysSelection) {
+            if (numDays === '5') {
+                if (daysSelection === 'work') {
+                    return 5;
+                } else {
+                    return 7;
+                }
+            } else {
+                if (daysSelection === 'work') {
+                    return 20;
+                } else {
+                    return 28;
+                }
+            }
         },
         saveConfig: function() {
             this.savedConfigs.push({
-                tab: this.tab,
-                numDishes: this.numDishes,
-                numDays: this.numDays,
-                daysSelection: this.daysSelection,
-                isDessertAdded: this.isDessertAdded,
+                ...this.configuration,
                 price: this.price,
             });
             if (this.isMobile) {
@@ -77,11 +98,10 @@ export const appComp = {
         deleteConfig: function(index) {
             if (index === 'current') {
                 const config = this.savedConfigs[this.savedConfigs.length - 1];
-                this.tab = config.tab;
-                this.numDishes = config.numDishes;
-                this.numDays = config.numDays;
-                this.tab = config.tab;
-                this.isDessertAdded = config.isDessertAdded;
+                this.configuration.tab = config.tab;
+                this.configuration.numDishes = config.numDishes;
+                this.configuration.numDays = config.numDays;
+                this.configuration.isDessertAdded = config.isDessertAdded;
                 this.savedConfigs.splice(this.savedConfigs.length - 1, 1);
             } else {
                 this.savedConfigs.splice(index, 1);
@@ -98,46 +118,46 @@ export const appComp = {
     },
     computed: {
         currentDishes: function() {
+            const { tab, isDessertAdded, isDrinkAdded } = this.configuration;
             const dayDishes = this.dishesData.filter(dish => {
-                return dish.menu === this.tab && dish.day == this.day;
+                return dish.menu === tab && dish.day == this.day;
             });
             const dishes = dayDishes.slice(0, Number(this.numDishes));
-            if (this.isDessertAdded) {
+            if (isDessertAdded) {
                 dishes.push(dayDishes.find(dish => dish.index === 'dessert'));
+            }
+            if (isDrinkAdded) {
+                dishes.push(this.drinkData);
             }
             return dishes;
         },
         price: function() {
-            const pricesForDiffDays = this.prices[this.tab][this.numDishes][this.daysSelection];
-            let price = pricesForDiffDays[this.numDays];
-            let profit;
-            if (this.numDays === '20') {
+            const { tab, numDishes, daysSelection, numDays, isDessertAdded, isDrinkAdded } = this.configuration;
+            const pricesForDiffDays = this.prices[tab][numDishes][daysSelection];
+            let profit, dessertPrice = 0, drinkPrice = 0, discountCoeff = 1;
+            if (numDays === '20') {
                 profit = 4 * pricesForDiffDays['5'] - pricesForDiffDays['20'];
             }
-            if (this.isDessertAdded) {
-                let numDays = 5;
-                if (this.numDays === '5') {
-                    if (this.daysSelection === 'work') {
-                        numDays = 5;
-                    } else {
-                        numDays = 7;
-                    }
-                } else {
-                    if (this.daysSelection === 'work') {
-                        numDays = 20;
-                    } else {
-                        numDays = 28;
-                    }
-                }
-                price += 100 * numDays;
-            }
             if (!this.promocodeResults.discount && this.savedConfigs.length) {
-                price = Math.floor(0.9 * price);
+                discountCoeff = 0.9;
+            }
+            let basePrice = pricesForDiffDays[numDays] * discountCoeff;
+            let price = basePrice;
+            if (isDessertAdded) {
+                dessertPrice = this.prices.dessert * this.getNumericNumDays(numDays, daysSelection) * discountCoeff;
+                price += dessertPrice;
+            }
+            if (isDrinkAdded) {
+                drinkPrice = this.prices.drink * this.getNumericNumDays(numDays, daysSelection) * discountCoeff;
+                price += drinkPrice;
             }
             return {
                 price,
                 profit,
-                textPrice: `${price}р`,
+                basePrice,
+                dessertPrice,
+                drinkPrice,
+                textPrice: `${basePrice}р`,
                 textProfit: `Ваша выгода — ${profit} р/день`
             }
         },
@@ -176,13 +196,14 @@ export const appComp = {
             return price;
         },
         menuLink: function() {
-            return this.menuLinks[this.tab];
+            return this.menuLinks[this.configuration.tab];
         },
         orderLink: function() {
+            const { tab, numDishes, daysSelection, numDays, isDessertAdded } = this.configuration;
             const link = (configs) => `#order:${configs}=${this.cartPrice}`;
-            let configs = `Рацион "${dict.menus[this.tab]}":` + 
-                `${dict.numDishes[this.numDishes]}${this.isDessertAdded ? '+десерт' : ''},` +
-                `${dict.daysSelect[this.daysSelection][this.numDays]}`;
+            let configs = `Рацион "${dict.menus[tab]}":` + 
+                `${dict.numDishes[numDishes]}${isDessertAdded ? '+десерт' : ''},` +
+                `${dict.daysSelect[daysSelection][numDays]}`;
             this.savedConfigs.forEach(config => {
                 configs += ` + Рацион "${dict.menus[config.tab]}":` +
                     `${dict.numDishes[config.numDishes]}${config.isDessertAdded ? '+десерт' : ''},` +

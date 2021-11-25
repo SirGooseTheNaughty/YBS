@@ -83,10 +83,11 @@ p {
   height: 61px;
 }
 .left {
+  height: min-content;
   background-color: var(--mainColor);
   grid-area: left;
   border-bottom-left-radius: 15px;
-  padding: 41px 48px 18px 48px;
+  padding: 41px 48px 56px 48px;
   transition: background-color var(--animation-time-short) ease;
 }
 .right {
@@ -200,7 +201,14 @@ p {
   background-color: var(--lighterColor);
   color: var(--fontBlack);
 }
-.dessert {
+.additives {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 15px;
+  row-gap: 12px;
+  font-size: 16px;
+}
+.additive {
   width: 100%;
   height: 60px;
   display: flex;
@@ -211,11 +219,15 @@ p {
   margin-bottom: 30px;
   cursor: pointer;
 }
-.dessert p {
+.additive__label {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: flex-start;
   margin-right: 10px;
   color: var(--darkColor);
 }
-.dessert .dessert__plus {
+.additive .additive__plus {
   width: 30px;
   height: 30px;
   display: grid;
@@ -224,10 +236,10 @@ p {
   background-color: var(--whiteBG);
   transition: var(--animation-time-short);
 }
-.dessert.added .dessert__plus {
+.additive.added .additive__plus {
   transform: rotate(45deg);
 }
-.dessert .dessert__plus path {
+.additive .additive__plus path {
   stroke: var(--darkColor);
 }
 .menuSampleCont {
@@ -388,7 +400,7 @@ p {
   position: absolute;
   top: 20%;
   left: 10%;
-  max-width: 190px;
+  max-width: 257px;
   background-color: white;
   border-radius: 10px;
   padding: 19px 16px;
@@ -610,12 +622,19 @@ p {
   font-size: 13px;
   width: 100%;
 }
+.pre-cart__config {
+  margin-bottom: 18px;
+}
 .pre-cart__item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 0 7px 0;
   word-break: keep-all;
+}
+.pre-cart__item-value {
+  width: 92%;
+  display: flex;
+  justify-content: space-between;
 }
 .pre-cart__item .cross {
   width: 20px;
@@ -625,6 +644,9 @@ p {
   cursor: pointer;
   border-radius: 50%;
   transition: var(--animation-time-short);
+}
+.pre-cart__item-price {
+  color: var(--darkColor);
 }
 .pre-cart__add {
   display: flex;
@@ -687,10 +709,10 @@ p {
   .daySwitch .button:hover {
     background-color: var(--darkerColor);
   }
-  .dessert:hover .dessert__plus {
+  .additive:hover .additive__plus {
     background-color: var(--darkColor);
   }
-  .dessert:hover .dessert__plus path {
+  .additive:hover .additive__plus path {
     stroke: var(--fontWhite);
   }
   .dishExampleArrow:hover {
@@ -716,6 +738,9 @@ p {
   .right {
     padding-left: 45px;
     padding-right: 45px;
+  }
+  .left {
+    padding: 36px 45px 68px 45px;
   }
   .right {
     background-color: var(--lighterColor);
@@ -757,8 +782,9 @@ p {
     margin-right: 17px;
     margin-bottom: 21px;
   }
-  .dessert {
+  .additive {
     margin-bottom: 44px;
+    border-radius: 22px;
   }
   .content[data-active-tab="lite"] .dish:first-child {
     margin-bottom: 0;
@@ -854,11 +880,12 @@ p {
     margin-right: 7px;
     margin-bottom: 22px;
   }
-  .dessert {
+  .additive {
     height: 51px;
     margin-bottom: 0;
+    border-radius: 30px;
   }
-  .dessert p {
+  .additive p {
     font-size: 16px;
   }
   .menuSampleCont {
@@ -949,6 +976,15 @@ p {
   .dish:first-child {
     margin-right: 21px;
     margin-bottom: 20px;
+  }
+  .additives {
+    flex-flow: column;
+  }
+  .additive__label {
+    flex-flow: row;
+  }
+  .additive__label p:first-child {
+    margin-right: 0.4em;
   }
   .menuSampleCont {
     grid-template-rows: 35px 1fr;
@@ -1055,10 +1091,11 @@ p {
     border-radius: 7px;
     font-size: 12px;
   }
-  .dessert {
+  .additive {
     height: 48px;
+    border-radius: 8px;
   }
-  .dessert p {
+  .additive p {
     font-size: 14px;
   }
   .daySwitch .day-full {

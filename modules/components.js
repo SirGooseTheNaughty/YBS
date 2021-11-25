@@ -1,17 +1,17 @@
 import { taglinePics, daySwitchArrow, promocodePics, popupIcon, dessertPlus, dishExampleArrow, preCartItemCross, preCardPlus, picsLoader } from './svgs.js';
-import { taglineTexts, daysTexts, promoResultsTexts, dessertLines, dict } from "./data.js";
+import { taglineTexts, daysTexts, promoResultsTexts, additiveLines, dict } from "./data.js";
 import { getPromocodeResults } from './service.js';
 import { nutritionValues } from './nutritionData.js';
 
-const activityParams = (param) => ({
+const activityParams = (param, subParam = null) => ({
     computed: {
         isActive: function() {
-            return this.getIsActive(param, this.value);
+            return this.getIsActive(param, this.value, subParam);
         }
     },
     methods: {
         onClick: function() {
-            this.setValue(param, this.value);
+            this.setValue(param, this.value, subParam);
         }
     }
 })
@@ -21,7 +21,7 @@ export const tabComp = {
     template: `
         <div class="tab" :class="{ active: isActive }" v-on:click="onClick">{{ title }}</div>
     `,
-    ...activityParams('tab')
+    ...activityParams('configuration', 'tab')
 }
 
 export const tagLineComp = {
@@ -47,25 +47,31 @@ export const numDishesComp = {
     template: `
         <div class="dish" :class="{ active: isActive }" v-on:click="onClick">{{ title }}</div>
     `,
-    ...activityParams('numDishes')
+    ...activityParams('configuration', 'numDishes')
 }
 
-export const dessertComp = {
-    props: ['set-value', 'is-added'],
+export const additiveComp = {
+    props: ['param', 'text', 'subtext', 'set-value', 'configuration'],
     template: `
-        <div class="dessert" :class="{ added: isAdded }" v-on:click="toggle">
-            <p>{{ text }}</p>
-            <div class="dessert__plus">${dessertPlus}</div>
+        <div class="additive" :class="{ added: isAdded }" v-on:click="toggle">
+            <div class="additive__label">
+                <p>{{ totalText }}</p>
+                <p v-if="!isAdded">{{ subtext }}</p>
+            </div>
+            <div class="additive__plus">${dessertPlus}</div>
         </div>
     `,
     computed: {
-        text: function() {
-            return this.isAdded ? dessertLines.remove : dessertLines.add;
+        totalText: function() {
+            return (this.isAdded ? additiveLines.remove : additiveLines.add) + this.text;
+        },
+        isAdded: function() {
+            return this.configuration[this.param];
         }
     },
     methods: {
         toggle: function() {
-            this.setValue('isDessertAdded', !this.isAdded);
+            this.setValue('configuration', !this.isAdded, this.param);
             if (!this.isAdded) {
                 this.setValue('dishesX', 'max');
             } else {
@@ -126,9 +132,7 @@ export const dishExampleComp = {
             e.stopPropagation();
             const { x, y, width, right } = e.target.getBoundingClientRect();
             const xWithCheck = right + 190 > $(window).width() ? x - 190 : x + width;
-            this.setValue('dishPopupInfo', this.dishData.name, 'name');
-            this.setValue('dishPopupInfo', this.dishData.weight, 'weight');
-            this.setValue('dishPopupInfo', this.dishData.text, 'text');
+            Object.entries(this.dishData).forEach(([key, val]) => this.setValue('dishPopupInfo', val, key));
             this.setValue('dishPopupInfo', xWithCheck, 'x');
             this.setValue('dishPopupInfo', y, 'y');
             this.setValue('dishPopupInfo', true, 'isShown');
@@ -273,8 +277,11 @@ export const dishExamplePopup = {
     template: `
         <div class="dishPopup" :class="{ hidden: !dishData.isShown }" :style="getStyle">
             <div class="dishPopup__title">{{ dishData.name }}</div>
-            <div class="dishPopup__weight">Вес: <span class="dishPopup__weightValue">{{ dishData.weight }} г</span></div>
-            <div class="dishPopup__ing">Состав: <span class="dishPopup__ingValue">{{ dishData.text }}</span></div>
+            <div v-if="!dishData.drinkOptions" class="dishPopup__weight">Вес: <span class="dishPopup__weightValue">{{ dishData.weight }} г</span></div>
+            <div v-if="!dishData.drinkOptions" class="dishPopup__ing">Состав: <span class="dishPopup__ingValue">{{ dishData.text }}</span></div>
+            <div v-if="dishData.drinkOptions" class="dishPopup__drinks">
+                <p v-for="option in dishData.drinkOptions" class="dishPopup__ingValue">{{ option }}</p>
+            </div>
         </div>
     `,
     computed: {
@@ -285,7 +292,7 @@ export const dishExamplePopup = {
 }
 
 export const nutritionComp = {
-    props: ['tab', 'num-dishes', 'day', 'is-dessert-added', 'dishes'],
+    props: ['configuration', 'day'],
     template: `
         <div class="nutrition">
             <div class="text">КБЖУ</div>
@@ -294,10 +301,11 @@ export const nutritionComp = {
     `,
     computed: {
         nutritionText: function() {
-            const dayData = nutritionValues[this.tab][this.numDishes][this.day];
+            const { tab, numDishes, isDessertAdded } = this.configuration;
+            const dayData = nutritionValues[tab][numDishes][this.day];
             let [ccal, prot, fat, carb] = dayData.split('/');
-            if (this.isDessertAdded) {
-                const dessertData = nutritionValues[this.tab].desserts[this.day];
+            if (isDessertAdded) {
+                const dessertData = nutritionValues[tab].desserts[this.day];
                 const [dccal, dprot, dfat, dcarb] = dessertData.split('/');
                 ccal = Number(ccal) + Number(dccal);
                 prot = Number(prot) + Number(dprot);
@@ -323,11 +331,11 @@ export const daysSelectionComp = {
     template: `
         <div class="day" :class="{ active: isActive }" v-on:click="onClick">{{ text }}</div>
     `,
-    ...activityParams('daysSelection')
+    ...activityParams('configuration', 'daysSelection')
 }
 
 export const numDaysComp = {
-    props: ['value', 'tab', 'days-selection', 'get-is-active', 'set-value', 'is-dessert-added', 'price'],
+    props: ['value', 'configuration', 'get-is-active', 'set-value', 'prices'],
     template: `
         <div class="numDays" :class="{ active: isActive }" v-on:click="onClick">
             <span class="numDay">{{ numDays }}</span>
@@ -336,26 +344,33 @@ export const numDaysComp = {
     `,
     computed: {
         isActive: function() {
-            return this.getIsActive('numDays', this.value);
+            return this.getIsActive('configuration', this.value, 'numDays');
         },
         numDays: function() {
             if (this.value == 5) {
-                return this.daysSelection === 'work' ? 5 : 7;
+                return this.configuration.daysSelection === 'work' ? 5 : 7;
             }
-            return this.daysSelection === 'work' ? 20 : 28;
+            return this.configuration.daysSelection === 'work' ? 20 : 28;
         },
         subtext: function() {
             return `(${this.getOneDayPrice(this.numDays)} р/день)`;
+        },
+        numDaysPrice: function() {
+            const { tab, numDishes, daysSelection } = this.configuration;
+            return this.prices[tab][numDishes][daysSelection][this.value]
         }
     },
     methods: {
         onClick: function() {
-            this.setValue('numDays', this.value);
+            this.setValue('configuration', this.value, 'numDays');
         },
         getOneDayPrice: function(days) {
-            let dayPrice = Math.floor((Number(this.price) / days));
-            if (this.isDessertAdded) {
-                dayPrice += 100;
+            let dayPrice = Math.floor((Number(this.numDaysPrice) / days));
+            if (this.configuration.isDessertAdded) {
+                dayPrice += this.prices.dessert;
+            }
+            if (this.configuration.isDrinkAdded) {
+                dayPrice += this.prices.drink;
             }
             return dayPrice;
         }
@@ -442,32 +457,62 @@ export const promocodeInputComp = {
 }
 
 export const preCartItemComp = {
-    props: ['text', 'index', 'delete-config'],
+    props: ['config', 'index', 'price', 'delete-config'],
     template: `
-        <div class="pre-cart__item">
-            <p>{{ text }}</p>
-            <div v-if="deleteConfig" class="cross" v-on:click="remove">${preCartItemCross}</div>
+        <div class="pre-cart__config">
+            <div class="pre-cart__item pre-cart__menu">
+                <div class="pre-cart__item-value">
+                    <p>{{ text }}</p>
+                    <p class="pre-cart__item-price">{{ price.textPrice }}</p>
+                </div>
+                <div v-if="deleteConfig" class="cross" v-on:click="remove">${preCartItemCross}</div>
+            </div>
+            <div v-if="config.isDessertAdded" class="pre-cart__item">
+                <div class="pre-cart__item-value">
+                    <p>+ десерт</p>
+                    <p class="pre-cart__item-price">{{ price.dessertPrice + 'р' }}</p>
+                </div>
+            </div>
+            <div v-if="config.isDrinkAdded" class="pre-cart__item">
+                <div class="pre-cart__item-value">
+                    <p>+ напиток</p>
+                    <p class="pre-cart__item-price">{{ price.drinkPrice + 'р' }}</p>
+                </div>
+            </div>
         </div>
     `,
+    computed: {
+        text: function() {
+            const { tab, numDishes, daysSelection, numDays } = this.config;
+            return `Рацион "${dict.menus[tab]}": ${dict.numDishes[numDishes]}, ${dict.daysSelect[daysSelection][numDays]}`;
+        },
+    },
     methods: {
         remove: function() {
             this.deleteConfig(this.index)
-        }
+        },
     }
 }
 
 export const preCartComp = {
-    props: ['tab', 'is-dessert-added', 'num-dishes', 'num-days', 'days-selection', 'price', 'saved-configs', 'add-config', 'delete-config'],
+    props: ['configuration', 'price', 'saved-configs', 'add-config', 'delete-config'],
     template: `
         <div class="pre-cart">
             <pre-cart-item
                 v-for="(config, index) in savedConfigs"
-                :text="getItemText(config)"
+                :config="config"
+                :price="config.price"
                 :index="index"
-                :key="configKey"
+                :key="index"
                 :delete-config="deleteConfig"
             ></pre-cart-item>
-            <pre-cart-item :text="currentText" key="current" :delete-config="deleteCurrent"></pre-cart-item>
+            <pre-cart-item
+                :config="configuration"
+                :price="price"
+                index="current"
+                key="current"
+                :delete-config="deleteCurrent"
+            ></pre-cart-item>
             <div class="pre-cart__add" v-on:click="addConfig">
                 <div class="plus">${preCardPlus}</div>
                 <p>Добавить рацион</p>
@@ -475,13 +520,6 @@ export const preCartComp = {
         </div>
     `,
     computed: {
-        currentText: function() {
-            return `
-                Рацион "${dict.menus[this.tab]}":
-                ${dict.numDishes[this.numDishes]}${this.isDessertAdded ? '+десерт' : ''},
-                ${dict.daysSelect[this.daysSelection][this.numDays]} — ${this.price}
-            `;
-        },
         configKey: function() {
             return JSON.stringify(this.config);
         },
@@ -490,15 +528,6 @@ export const preCartComp = {
                 return () => this.deleteConfig('current');
             }
             return null
-        }
-    },
-    methods: {
-        getItemText: function(config) {
-            return `
-                Рацион "${dict.menus[config.tab]}":
-                ${dict.numDishes[config.numDishes]}${config.isDessertAdded ? '+десерт' : ''},
-                ${dict.daysSelect[config.daysSelection][config.numDays]} — ${config.price.textPrice}
-            `;
         }
     }
 }

@@ -9,39 +9,34 @@
 </head>
 <body>
     <div id="app" class="configurator" :class="{ mobileSafari: isMobileSafari}" v-on:touchstart="hidePopup">
-        <div class="content" :data-tab="tab">
+        <div class="content" :data-tab="configuration.tab">
             <div class="tabs">
                 <tab class="tabHome" title="Домашняя" value="home" :get-is-active="isActive" :set-value="setParameter"></tab>
                 <tab class="tabLite" title="Лайт" value="lite" :get-is-active="isActive" :set-value="setParameter"></tab>
                 <tab class="tabAvan" title="Авангард" value="avan" :get-is-active="isActive" :set-value="setParameter"></tab>
             </div>
             <div class="left">
-                <div class="dishesCont">
-                    <tagline :tab="tab"></tagline>
-                    <div class="leftContent">
-                        <div class="numDishes">
-                            <num-dishes title="3 блюда" value="3" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
-                            <num-dishes title="4 блюда" value="4" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
-                            <num-dishes class="hit" title="5 блюд" value="5" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
-                            <num-dishes title="6 блюд" value="6" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
-                        </div>
-                        <dessert :set-value="setParameter" :is-added="isDessertAdded"></dessert>
-                        <div class="menuSampleCont">
-                            <div class="menuSampleText">Пример меню на день</div>
-                            <day-switch :day="day" :set-value="setParameter"></day-switch>
-                            <dishes-example :set-value="setParameter" :dishes="currentDishes" :x="dishesX"></dishes-example>
-                            <dish-popup :dish-data="dishPopupInfo"></dish-popup>
-                        </div>
-                        <div class="nutritionAndLink">
-                            <nutrition
-                                :tab="tab"
-                                :num-dishes="numDishes"
-                                :day="day"
-                                :is-dessert-added="isDessertAdded"
-                                :dishes="currentDishes"
-                            ></nutrition>
-                            <a class="menuLink" :href="menuLink">Подробное меню на неделю</a>
-                        </div>
+                <tagline :tab="configuration.tab"></tagline>
+                <div class="leftContent">
+                    <div class="numDishes">
+                        <num-dishes title="3 блюда" value="3" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
+                        <num-dishes title="4 блюда" value="4" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
+                        <num-dishes class="hit" title="5 блюд" value="5" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
+                        <num-dishes title="6 блюд" value="6" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
+                    </div>
+                    <div class="additives">
+                        <additive param="isDessertAdded" text="десерт" subtext=" (100 р/день)" :set-value="setParameter" :configuration="configuration"></additive>
+                        <additive param="isDrinkAdded" text="напиток" subtext=" (50 р/день)" :set-value="setParameter" :configuration="configuration"></additive>
+                    </div>
+                    <div class="menuSampleCont">
+                        <div class="menuSampleText">Пример меню на день</div>
+                        <day-switch :day="day" :set-value="setParameter"></day-switch>
+                        <dishes-example :set-value="setParameter" :dishes="currentDishes" :x="dishesX"></dishes-example>
+                        <dish-popup :dish-data="dishPopupInfo"></dish-popup>
+                    </div>
+                    <div class="nutritionAndLink">
+                        <nutrition :configuration="configuration" :day="day" ></nutrition>
+                        <a class="menuLink" :href="menuLink">Подробное меню на неделю</a>
                     </div>
                 </div>
             </div>
@@ -53,33 +48,13 @@
                 </div>
                 <div class="question q-numDays">Количество дней</div>
                 <div class="numDaysSelect">
-                    <num-days
-                        value="5"
-                        :tab="tab"
-                        :days-selection="daysSelection"
-                        :get-is-active="isActive"
-                        :set-value="setParameter"
-                        :is-dessert-added="isDessertAdded"
-                        :price="prices[tab][numDishes][daysSelection][5]"
-                    ></num-days>
-                    <num-days
-                        value="20"
-                        :tab="tab"
-                        :days-selection="daysSelection"
-                        :get-is-active="isActive"
-                        :set-value="setParameter"
-                        :is-dessert-added="isDessertAdded"
-                        :price="prices[tab][numDishes][daysSelection][20]"
-                    ></num-days>
+                    <num-days value="5" :configuration="configuration" :get-is-active="isActive" :set-value="setParameter" :prices="prices" ></num-days>
+                    <num-days value="20" :configuration="configuration" :get-is-active="isActive" :set-value="setParameter" :prices="prices" ></num-days>
                 </div>
                 <promocode :set-value="setParameter" :promocode-results="promocodeResults" :saved-configs="savedConfigs" :check-promocode="checkPromocodeInternally"></promocode>
                 <pre-cart
-                    :tab="tab"
-                    :is-dessert-added="isDessertAdded"
-                    :num-days="numDays"
-                    :num-dishes="numDishes"
-                    :price="price.textPrice"
-                    :days-selection="daysSelection"
+                    :configuration="configuration"
+                    :price="price"
                     :saved-configs="savedConfigs"
                     :add-config="saveConfig"
                     :delete-config="deleteConfig"
