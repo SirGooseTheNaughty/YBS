@@ -1,6 +1,3 @@
-// import { fetchQuestions, preformResults, fetchResults } from './functions.js';
-// import { loadCookies, saveCookies, unloadListener, showResults } from './utils.js';
-// import { colorSchemes } from "./data.js";
 import { fetchData, connectBasket, checkout, checkPromocodeInternally } from './service.js';
 import { pricesData } from './prices.js';
 import { dict } from './data.js';
@@ -50,11 +47,6 @@ export const appComp = {
         this.dishesData = dishesData.length ? dishesData : getMockedData();
         this.drinkData = this.dishesData.find(dish => dish.index === 'drink');
         console.log(this.dishesData, this.drinkData);
-    },
-    watch: {
-        numDishes: function() {
-            this.dishesX = 0;
-        }
     },
     methods: {
         setParameter: function(parameter, value, subParameter = null) {

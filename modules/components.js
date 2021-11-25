@@ -47,7 +47,13 @@ export const numDishesComp = {
     template: `
         <div class="dish" :class="{ active: isActive }" v-on:click="onClick">{{ title }}</div>
     `,
-    ...activityParams('configuration', 'numDishes')
+    ...activityParams('configuration', 'numDishes'),
+    methods: {
+        onClick: function() {
+            this.setValue('configuration', this.value, 'numDishes');
+            this.setValue('dishesX', 0);
+        }
+    }
 }
 
 export const additiveComp = {
@@ -72,7 +78,7 @@ export const additiveComp = {
     methods: {
         toggle: function() {
             this.setValue('configuration', !this.isAdded, this.param);
-            if (!this.isAdded) {
+            if (this.isAdded) {
                 this.setValue('dishesX', 'max');
             } else {
                 this.setValue('dishesX', 'min');
@@ -184,7 +190,7 @@ export const dishesExapmleComp = {
             this.maxShift = lastElement.offsetLeft + lastElement.offsetWidth - this.$refs.cont.offsetWidth;
         }
         if (this.x === 0) {
-            this.onBorder = 'left'
+            this.onBorder = 'left';
         }
         if (this.x === 'max' || (this.onBorder === 'right' && this.x === 'min')) {
             this.onBorder = 'right';
