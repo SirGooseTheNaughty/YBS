@@ -624,23 +624,24 @@ p {
 }
 .pre-cart__config {
   margin-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 .pre-cart__item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  word-break: keep-all;
+  width: 100%;
 }
 .pre-cart__item-value {
-  width: 92%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
-.pre-cart__item .cross {
+.pre-cart__config .cross {
   width: 20px;
   height: 20px;
   display: grid;
   place-items: center;
+  margin-left: 10px;
   cursor: pointer;
   border-radius: 50%;
   transition: var(--animation-time-short);

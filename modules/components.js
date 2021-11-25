@@ -471,20 +471,16 @@ export const preCartItemComp = {
                     <p>{{ text }}</p>
                     <p class="pre-cart__item-price">{{ price.textPrice }}</p>
                 </div>
-                <div v-if="deleteConfig" class="cross" v-on:click="remove">${preCartItemCross}</div>
-            </div>
-            <div v-if="config.isDessertAdded" class="pre-cart__item">
-                <div class="pre-cart__item-value">
+                <div v-if="config.isDessertAdded" class="pre-cart__item-value">
                     <p>+ десерт</p>
                     <p class="pre-cart__item-price">{{ price.dessertPrice + 'р' }}</p>
                 </div>
-            </div>
-            <div v-if="config.isDrinkAdded" class="pre-cart__item">
-                <div class="pre-cart__item-value">
+                <div v-if="config.isDrinkAdded" class="pre-cart__item-value">
                     <p>+ напиток</p>
                     <p class="pre-cart__item-price">{{ price.drinkPrice + 'р' }}</p>
                 </div>
             </div>
+            <div v-if="deleteConfig" class="cross" v-on:click="remove">${preCartItemCross}</div>
         </div>
     `,
     computed: {
