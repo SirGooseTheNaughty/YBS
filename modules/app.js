@@ -118,11 +118,11 @@ export const appComp = {
     },
     computed: {
         currentDishes: function() {
-            const { tab, isDessertAdded, isDrinkAdded } = this.configuration;
+            const { tab, numDishes, isDessertAdded, isDrinkAdded } = this.configuration;
             const dayDishes = this.dishesData.filter(dish => {
                 return dish.menu === tab && dish.day == this.day;
             });
-            const dishes = dayDishes.slice(0, Number(this.numDishes));
+            const dishes = dayDishes.slice(0, Number(numDishes));
             if (isDessertAdded) {
                 dishes.push(dayDishes.find(dish => dish.index === 'dessert'));
             }
