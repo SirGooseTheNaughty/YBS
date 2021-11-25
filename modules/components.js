@@ -1,5 +1,5 @@
 import { taglinePics, daySwitchArrow, promocodePics, popupIcon, dessertPlus, dishExampleArrow, preCartItemCross, preCardPlus, picsLoader } from './svgs.js';
-import { taglineTexts, daysTexts, promoResultsTexts, additiveLines, dict } from "./data.js";
+import { taglineTexts, daysTexts, promoResultsTexts, additiveLines, dict, preCardAdditives } from "./data.js";
 import { getPromocodeResults } from './service.js';
 import { nutritionValues } from './nutritionData.js';
 
@@ -472,11 +472,11 @@ export const preCartItemComp = {
                     <p class="pre-cart__item-price">{{ price.textPrice }}</p>
                 </div>
                 <div v-if="config.isDessertAdded" class="pre-cart__item-value">
-                    <p>+ десерт</p>
+                    <p>${preCardAdditives.dessert}</p>
                     <p class="pre-cart__item-price">{{ price.dessertPrice + 'р' }}</p>
                 </div>
                 <div v-if="config.isDrinkAdded" class="pre-cart__item-value">
-                    <p>+ напиток</p>
+                    <p>${preCardAdditives.drink}</p>
                     <p class="pre-cart__item-price">{{ price.drinkPrice + 'р' }}</p>
                 </div>
             </div>

@@ -33,6 +33,10 @@ export const additiveLines = {
     add: 'Добавить ',
     remove: 'Убрать '
 };
+export const preCardAdditives = {
+    dessert: '+ десерт',
+    drink: '+ напиток на выбор'
+};
 export const dict = {
     menus: {
         home: 'Домашний',
