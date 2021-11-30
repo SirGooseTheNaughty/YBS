@@ -73,3 +73,8 @@ try {
         globalApp.setParameter('prices', pricesData);
     }
 } catch(e) {}
+try {
+    if (basketId) {
+        document.querySelector(basketId).style.display = 'none';
+    }
+} catch(e) {}

@@ -74,18 +74,19 @@ export function checkPromocodeInternally(context, promocode) {
     if (!isPromocodeStricted) {
         return true;
     }
+    const { configuration } = context;
     const validPromocodes = context.promoValues.filter(value => {
         const { menu, numDishes, daysSelection, numDays, codes } = value;
-        if (menu && menu !== context.tab) {
+        if (menu && menu !== configuration.tab) {
             return false;
         }
-        if (numDishes && numDishes !== context.numDishes) {
+        if (numDishes && numDishes !== configuration.numDishes) {
             return false;
         }
-        if (daysSelection && daysSelection !== context.daysSelection) {
+        if (daysSelection && daysSelection !== configuration.daysSelection) {
             return false;
         }
-        if (numDays && numDays !== context.numDays) {
+        if (numDays && numDays !== configuration.numDays) {
             return false;
         }
         if (!codes.map(code => code.toLowerCase()).includes(promocode)) {
