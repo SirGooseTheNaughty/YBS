@@ -52,12 +52,13 @@ async function fetchPromocode (code) {
 }
 
 export async function getPromocodeResults (promocode) {
+    return { status: 'ok', type: 'percent', discount: 20 };
     const promoResult = {status: null, type: null, discount: null};
     const res = await fetchPromocode(promocode);
         if (res.message === 'OK') {
             promoResult.status = 'ok';
             if (res.discountpercent) {
-                promoResult.type = 'persent';
+                promoResult.type = 'percent';
                 promoResult.discount = parseFloat(res.discountpercent);
             } else {
                 promoResult.type = 'sum';
@@ -69,12 +70,12 @@ export async function getPromocodeResults (promocode) {
     return promoResult;
 }
 
-export function checkPromocodeInternally(context, promocode) {
+export function checkPromocodeInternally(context, promocode, config = null) {
     const isPromocodeStricted = context.promoValues.findIndex(code => code.codes.map(code => code.toLowerCase()).includes(promocode)) !== -1;
     if (!isPromocodeStricted) {
         return true;
     }
-    const { configuration } = context;
+    const configuration = config || context.configuration
     const validPromocodes = context.promoValues.filter(value => {
         const { menu, numDishes, daysSelection, numDays, codes } = value;
         if (menu && menu !== configuration.tab) {
@@ -122,8 +123,8 @@ export function connectBasket(context) {
 }
 
 export function checkout (context) {
-    const { tab, payment, phone, price, promocodeResults: { discount, promocode } } = context;
-    context.basket.price.innerHTML = '' + price;
+    const { tab, payment, phone, totalPrice, promocodeResults: { discount, promocode } } = context;
+    context.basket.price.innerHTML = '' + totalPrice.basketPrice;
     context.basket.phone.value = phone;
     if (discount) {
         context.basket.promoInput.value = promocode;

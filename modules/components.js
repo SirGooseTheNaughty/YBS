@@ -136,7 +136,8 @@ export const dishExampleComp = {
     methods: {
         showPopup: function(e) {
             e.stopPropagation();
-            const { x, y, width, right } = e.target.getBoundingClientRect();
+            const { x, width, right } = e.target.getBoundingClientRect();
+            const y = $(e.target).offset().top;
             const xWithCheck = right + 190 > $(window).width() ? x - 190 : x + width;
             Object.entries(this.dishData).forEach(([key, val]) => this.setValue('dishPopupInfo', val, key));
             this.setValue('dishPopupInfo', xWithCheck, 'x');
@@ -384,7 +385,7 @@ export const numDaysComp = {
 }
 
 export const promocodeInputComp = {
-    props: ['set-value', 'promocode-results', 'saved-configs', 'check-promocode'],
+    props: ['set-value', 'promocode-results', 'saved-configs', 'check-promocode', 'is-promocode-valid'],
     data() {
         return {
             promocode: ''
@@ -402,6 +403,7 @@ export const promocodeInputComp = {
             ></input>
             <div class="promo__pic" v-html="icon" v-on:click="enterPromocode"></div>
             <div class="promo__status">{{ resultsText }}</div>
+            <div v-if="specialDiscountApplied" class="promo__status special">Применена скидка 10% на дополнительные рационы</div>
         </div>
     `,
     methods: {
@@ -441,10 +443,10 @@ export const promocodeInputComp = {
     },
     computed: {
         resultStatus: function() {
-            if (this.promocodeResults.status === 'ok') {
-                return this.promocodeResults.status;
+            if (!this.isPromocodeValid) {
+                return 'strict';
             }
-            return this.savedConfigs.length ? 'special' : this.promocodeResults.status;
+            return this.promocodeResults.status;
         },
         icon: function() {
             return promocodePics[this.resultStatus];
@@ -458,6 +460,9 @@ export const promocodeInputComp = {
         },
         placeholder: function() {
             return this.savedConfigs.length ? 'ДВАРАЦИОНА' : 'Введите промокод';
+        },
+        specialDiscountApplied: function() {
+            return this.savedConfigs.length && this.promocodeResults.status !== 'ok';
         }
     }
 }
@@ -469,7 +474,7 @@ export const preCartItemComp = {
             <div class="pre-cart__item pre-cart__menu">
                 <div class="pre-cart__item-value">
                     <p>{{ text }}</p>
-                    <p class="pre-cart__item-price">{{ price.textPrice }}</p>
+                    <p class="pre-cart__item-price">{{ price.price + 'р' }}</p>
                 </div>
                 <div v-if="config.isDessertAdded" class="pre-cart__item-value">
                     <p>${preCardAdditives.dessert}</p>
@@ -497,20 +502,20 @@ export const preCartItemComp = {
 }
 
 export const preCartComp = {
-    props: ['configuration', 'price', 'saved-configs', 'add-config', 'delete-config'],
+    props: ['configuration', 'saved-configs', 'add-config', 'delete-config', 'promocode-results', 'compute-price'],
     template: `
         <div class="pre-cart">
             <pre-cart-item
                 v-for="(config, index) in savedConfigs"
                 :config="config"
-                :price="config.price"
+                :price="computePrice(config, index)"
                 :index="index"
                 :key="index"
                 :delete-config="deleteConfig"
             ></pre-cart-item>
             <pre-cart-item
                 :config="configuration"
-                :price="price"
+                :price="computePrice(configuration, 'current')"
                 index="current"
                 key="current"
                 :delete-config="deleteCurrent"
@@ -530,7 +535,7 @@ export const preCartComp = {
                 return () => this.deleteConfig('current');
             }
             return null
-        }
+        },
     }
 }
 

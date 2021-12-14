@@ -608,6 +608,9 @@ p {
   text-align: center;
   color: var(--promoPicBg__ok);
 }
+.promo__status.special {
+  color: var(--promoPicBg__ok) !important;
+}
 .promo.enter .promo__status:empty {
   opacity: 0;
 }

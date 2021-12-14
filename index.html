@@ -51,13 +51,20 @@
                     <num-days value="5" :configuration="configuration" :get-is-active="isActive" :set-value="setParameter" :prices="prices" ></num-days>
                     <num-days value="20" :configuration="configuration" :get-is-active="isActive" :set-value="setParameter" :prices="prices" ></num-days>
                 </div>
-                <promocode :set-value="setParameter" :promocode-results="promocodeResults" :saved-configs="savedConfigs" :check-promocode="checkPromocodeInternally"></promocode>
+                <promocode
+                    :set-value="setParameter"
+                    :promocode-results="promocodeResults"
+                    :saved-configs="savedConfigs"
+                    :check-promocode="checkPromocodeInternally"
+                    :is-promocode-valid="isPromocodeValid"
+                ></promocode>
                 <pre-cart
                     :configuration="configuration"
-                    :price="price"
                     :saved-configs="savedConfigs"
                     :add-config="saveConfig"
                     :delete-config="deleteConfig"
+                    :promocode-results="promocodeResults"
+                    :compute-price="computePrice"
                 ></pre-cart>
                 <div class="price">
                     <div class="priceLabel">Итого:</div>
@@ -69,7 +76,7 @@
                 <div class="line"></div>
                 <div class="payment">
                     <payment-method text="Оплата курьеру" value="cash" :get-is-active="isActive" :set-value="setParameter"></payment-method>
-                    <payment-method text="Оплата онлайн" value="card" :get-is-active="isActive" :set-value="setParameter"></payment-method>
+                    <payment-method v-if="configuration.tab !== 'avan'" text="Оплата онлайн" value="card" :get-is-active="isActive" :set-value="setParameter"></payment-method>
                 </div>
                 <phone-input :set-value="setParameter"></phone-input>
                 <div class="button" v-on:click="checkout">
@@ -100,12 +107,26 @@
         const preventOrder = true;
         const promoValues = [
             {
-                codes: ['СПАСИБО'],
+                codes: ['NEW'],
                 menu: '',
                 numDishes: '',
                 daysSelection: '',
                 numDays: '5',
-            }
+            },
+            {
+                codes: ['TIKTOK'],
+                menu: '',
+                numDishes: '',
+                daysSelection: '',
+                numDays: '5',
+            },
+            {
+                codes: ['ЁЛКА'],
+                menu: '',
+                numDishes: '',
+                daysSelection: '',
+                numDays: '5',
+            },
         ];
     </script>
     <script src="./scripts/jquery.inputmask.min.js"></script>
