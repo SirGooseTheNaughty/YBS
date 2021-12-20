@@ -443,7 +443,7 @@ export const promocodeInputComp = {
     },
     computed: {
         resultStatus: function() {
-            if (!this.isPromocodeValid) {
+            if (this.promocodeResults.promocode && !this.isPromocodeValid) {
                 return 'strict';
             }
             return this.promocodeResults.status;
@@ -462,7 +462,7 @@ export const promocodeInputComp = {
             return this.savedConfigs.length ? 'ДВАРАЦИОНА' : 'Введите промокод';
         },
         specialDiscountApplied: function() {
-            return this.savedConfigs.length && this.promocodeResults.status !== 'ok';
+            return this.savedConfigs.length; // && this.promocodeResults.status !== 'ok';
         }
     }
 }

@@ -120,13 +120,14 @@ export function connectBasket(context) {
     context.basket.productsCont = basket.querySelector('.t706__cartwin-products');
     context.basket.promoInput = basket.querySelector('.t-inputpromocode');
     context.basket.promoBtn = basket.querySelector('.t-inputpromocode__btn');
+    context.basket.promoInput.value = '';
 }
 
 export function checkout (context) {
-    const { tab, payment, phone, totalPrice, promocodeResults: { discount, promocode } } = context;
+    const { tab, payment, phone, totalPrice, isPromocodeValid, promocodeResults: { discount, promocode } } = context;
     context.basket.price.innerHTML = '' + totalPrice.basketPrice;
     context.basket.phone.value = phone;
-    if (discount) {
+    if (isPromocodeValid && discount) {
         context.basket.promoInput.value = promocode;
         context.basket.promoBtn.click();
     }

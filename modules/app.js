@@ -140,17 +140,11 @@ export const appComp = {
 
             if ((!this.promocodeResults.discount || !this.isPromocodeValid) && this.savedConfigs.length && index !== 0) {
                 price *= 0.9;
-                dessertPrice *= 0.9;
-                drinkPrice *= 0.9;
                 actual.price *= 0.9;
-                actual.dessertPrice *= 0.9;
-                actual.drinkPrice *= 0.9;
             } else if (this.isPromocodeValid && this.promocodeResults.discount) {
                 if (this.promocodeResults.type === 'percent') {
                     const coeff = 1 - this.promocodeResults.discount / 100;
                     price = Math.floor(price * coeff);
-                    dessertPrice = Math.floor(dessertPrice * coeff);
-                    drinkPrice = Math.floor(drinkPrice * coeff);
                 } else if (index === 'current') {
                     price -= this.promocodeResults.discount;
                 }
@@ -161,10 +155,10 @@ export const appComp = {
     computed: {
         isPromocodeValid: function() {
             const code = this.promocodeResults.promocode;
-            let isValid = this.checkPromocodeInternally(code);
-            this.savedConfigs.forEach(config => {
-                isValid = isValid && checkPromocodeInternally(this, code, config);
-            });
+            let isValid = this.checkPromocodeInternally(code) && !this.savedConfigs.length;
+            // this.savedConfigs.forEach(config => {
+            //     isValid = isValid && checkPromocodeInternally(this, code, config);
+            // });
             return isValid;
 
         },
