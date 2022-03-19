@@ -52,7 +52,6 @@ async function fetchPromocode (code) {
 }
 
 export async function getPromocodeResults (promocode) {
-    return { status: 'ok', type: 'percent', discount: 20 };
     const promoResult = {status: null, type: null, discount: null};
     const res = await fetchPromocode(promocode);
         if (res.message === 'OK') {

@@ -51,12 +51,26 @@ export const dict = {
     },
     daysSelect: {
         'work': {
+            '2': '2 дня',
             '5': '5 дней',
             '20': '20 дней',
         },
         'each': {
+            '2': '2 дня',
             '5': '7 дней',
             '20': '28 дней',
         },
     }
 };
+export const defaultConfigs = {
+    std: {
+        numDishes: '5',
+        daysSelection: 'work',
+        numDays: '20',
+    },
+    try: {
+        numDishes: '5',
+        daysSelection: 'work',
+        numDays: '2',
+    }
+}

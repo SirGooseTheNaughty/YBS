@@ -1,6 +1,6 @@
 import { fetchData, connectBasket, checkout, checkPromocodeInternally } from './service.js';
 import { pricesData } from './prices.js';
-import { dict } from './data.js';
+import { dict, defaultConfigs } from './data.js';
 
 export const appComp = {
     el: '#app',
@@ -13,6 +13,7 @@ export const appComp = {
                 numDays: '20',
                 isDessertAdded: false,
                 isDrinkAdded: false,
+                tryMode: false,
             },
             day: 0,
             promocodeResults: {
@@ -46,16 +47,12 @@ export const appComp = {
         const dishesData = await fetchData();
         this.dishesData = dishesData.length ? dishesData : getMockedData();
         this.drinkData = this.dishesData.find(dish => dish.index === 'drink');
-        console.log(this.dishesData, this.drinkData);
     },
     watch: {
-        configuration: {
-            handler(val) {
-                if (val.tab === 'avan' && this.payment === 'card') {
-                    this.setParameter('payment', 'cash');
-                }
-            },
-            deep: true
+        isCardAvailable: function(old, isAvailable) {
+            if (!isAvailable && this.payment === 'card') {
+                this.setParameter('payment', 'cash');
+            }
         }
     },
     methods: {
@@ -64,6 +61,14 @@ export const appComp = {
                 this[parameter][subParameter] = value;
             } else {
                 this[parameter] = value;
+            }
+        },
+        toggleTryMode: function() {
+            this.configuration.tryMode = !this.configuration.tryMode;
+            this.savedConfigs = [];
+            this.configuration = {
+                ...this.configuration,
+                ...(this.configuration.tryMode ? defaultConfigs.try : defaultConfigs.std)
             }
         },
         isActive: function(parameter, value, subParameter = null) {
@@ -77,22 +82,17 @@ export const appComp = {
             if (numDays === '5') {
                 if (daysSelection === 'work') {
                     return 5;
-                } else {
-                    return 7;
                 }
+                return 7;
             } else {
                 if (daysSelection === 'work') {
                     return 20;
-                } else {
-                    return 28;
                 }
+                return 28;
             }
         },
         saveConfig: function() {
-            this.savedConfigs.push({
-                ...this.configuration,
-                price: this.price,
-            });
+            this.savedConfigs.push({...this.configuration});
             if (this.isMobile) {
                 $('html, body').animate({scrollTop: $("#app").offset().top}, 250);
             }
@@ -109,58 +109,84 @@ export const appComp = {
                 this.savedConfigs.splice(index, 1);
             }
         },
-        connectBasket: function() {
-            connectBasket(this);
-        },
-        checkout: function() {
-            checkout(this);
-        },
+        connectBasket: function() { connectBasket(this); },
+        checkout: function() { checkout(this); },
         hidePopup: function() { this.dishPopupInfo.isShown = false; },
-        checkPromocodeInternally: function(promocode) { return checkPromocodeInternally(this, promocode) },
+        checkPromocodeInternally: function(promocode, config = null) { return checkPromocodeInternally(this, promocode, config) },
+        getAllValidConfigs: function(promocode, configs) {
+            return configs.filter(config => this.checkPromocodeInternally(promocode, config));
+        },
+        getMinMaxPriceConfig: function(configs, promocode, mode = 'min') {
+            const validConfigs = promocode ? this.getAllValidConfigs(promocode, configs) : configs;
+            if (!validConfigs.length) {
+                return null;
+            }
+            let index = 0, price = this.configPrice(validConfigs[0]);
+            validConfigs.forEach((config, i) => {
+                const configPrice = this.configPrice(config);
+                if (mode === 'min') {
+                    if (configPrice < price) {
+                        price = configPrice;
+                        index = i;
+                    }
+                } else {
+                    if (configPrice > price) {
+                        price = configPrice;
+                        index = i;
+                    }
+                }
+            });
+            return validConfigs[index];
+        },
+        configPrice: function(config) {
+            const { tab, numDishes, daysSelection, numDays } = config;
+            return this.prices[tab][numDishes][daysSelection][numDays];
+        },
         computePrice: function(config, index) {
-            const { tab, numDishes, daysSelection, numDays, isDessertAdded, isDrinkAdded } = config;
-            const pricesForDiffDays = this.prices[tab][numDishes][daysSelection];
-            let profit, dessertPrice = 0, drinkPrice = 0, discountCoeff = 1;
-            if (numDays === '20') {
-                profit = 4 * pricesForDiffDays['5'] - pricesForDiffDays['20'];
-            }
-            let price = pricesForDiffDays[numDays];
-            if (isDessertAdded) {
-                dessertPrice = this.prices.dessert * this.getNumericNumDays(numDays, daysSelection);
-            }
-            if (isDrinkAdded) {
-                drinkPrice = this.prices.drink * this.getNumericNumDays(numDays, daysSelection);
-            }
-            
-            const actual = {
-                price: pricesForDiffDays[numDays],
-                dessertPrice,
-                drinkPrice
-            };
+            const { tab, numDishes, daysSelection, numDays, isDessertAdded, isDrinkAdded, tryMode } = config;
 
-            if ((!this.promocodeResults.discount || !this.isPromocodeValid) && this.savedConfigs.length && index !== 0) {
-                price *= 0.9;
-                actual.price *= 0.9;
-            } else if (this.isPromocodeValid && this.promocodeResults.discount) {
+            if (tryMode) {
+                const dessertPrice = isDessertAdded ? this.prices.dessert * 2 : 0;
+                const drinkPrice = isDrinkAdded ? this.prices.drink * 2 : 0;
+                return { price: 1440, dessertPrice, drinkPrice, profit: 0 };
+            }
+
+            const pricesForDiffDays = this.prices[tab][numDishes][daysSelection];
+            const profit = numDays === '20' ? 4 * pricesForDiffDays['5'] - pricesForDiffDays['20'] : 0;
+            const dessertPrice = isDessertAdded ? this.prices.dessert * this.getNumericNumDays(numDays, daysSelection) : 0;
+            const drinkPrice = isDrinkAdded ? this.prices.drink * this.getNumericNumDays(numDays, daysSelection) : 0;
+            let price = pricesForDiffDays[numDays];
+
+            if (this.isPromocodeValid) {
                 if (this.promocodeResults.type === 'percent') {
-                    const coeff = 1 - this.promocodeResults.discount / 100;
-                    price = Math.floor(price * coeff);
+                    const minPriceConfig = this.getMinMaxPriceConfig(this.allConfigs, this.promocodeResults.promocode);
+                    if (minPriceConfig === config) {
+                        const coeff = 1 - this.promocodeResults.discount / 100;
+                        price = Math.floor(price * coeff);
+                    }
                 } else if (index === 'current') {
                     price -= this.promocodeResults.discount;
                 }
+            } else if (this.savedConfigs.length) {
+                const maxPriceConfig = this.getMinMaxPriceConfig(this.allConfigs, null, 'max');
+                if (maxPriceConfig !== config) {
+                    price *= 0.9;
+                }
             }
-            return { price, dessertPrice, drinkPrice, profit, actual };
-        }
+            return { price, dessertPrice, drinkPrice, profit };
+        },
+        configToText: function(config = this.configuration) {
+            const { tab, numDishes, daysSelection, numDays, isDessertAdded, isDrinkAdded } = config;
+            return (`Рацион "${dict.menus[tab]}":` + 
+                `${dict.numDishes[numDishes]}${isDessertAdded ? '+десерт' : ''}${isDrinkAdded ? '+напиток' : ''},` +
+                `${dict.daysSelect[daysSelection][numDays]};`);
+        },
     },
     computed: {
+        allConfigs: function() { return [...this.savedConfigs, this.configuration]; },
         isPromocodeValid: function() {
             const code = this.promocodeResults.promocode;
-            let isValid = this.checkPromocodeInternally(code) && !this.savedConfigs.length;
-            // this.savedConfigs.forEach(config => {
-            //     isValid = isValid && checkPromocodeInternally(this, code, config);
-            // });
-            return isValid;
-
+            return !!(code && this.getAllValidConfigs(code, this.allConfigs).length);
         },
         currentDishes: function() {
             const { tab, numDishes, isDessertAdded, isDrinkAdded } = this.configuration;
@@ -179,43 +205,38 @@ export const appComp = {
         totalPrice: function() {
             let price = 0, profit = 0, basketPrice = 0;
             const current = this.computePrice(this.configuration, 'current');
-            const { actual } = current;
-            price = price + current.price + current.dessertPrice + current.drinkPrice;
-            basketPrice = basketPrice + actual.price + actual.dessertPrice + actual.drinkPrice;
+            const { price: currentPrice, dessertPrice, drinkPrice } = current;
+            price = price + currentPrice + dessertPrice + drinkPrice;
             profit += current.profit;
             this.savedConfigs.forEach((config, index) => {
                 const configPrice = this.computePrice(config, index);
                 price = price + configPrice.price + configPrice.dessertPrice + configPrice.drinkPrice;
                 profit += configPrice.profit;
-                const { actual } = configPrice;
-                basketPrice = basketPrice + actual.price + actual.dessertPrice + actual.drinkPrice;
             });
+            basketPrice = price;
+            if (this.isPromocodeValid) {
+                if (this.promocodeResults.type === 'percent') {
+                    basketPrice = basketPrice / (1 - Number(this.promocodeResults.discount) / 100);
+                } else {
+                    basketPrice += this.promocodeResults.discount;
+                }
+            }
             let priceArr = String(price).split('');
             priceArr.splice(priceArr.length - 3, 0, ' ');
-            console.log(basketPrice);
             return {
                 price,
                 basketPrice,
                 profit,
                 textPrice: `${priceArr.join('')} р`,
-                textProfit: `Ваша выгода — ${profit} р/день`
+                textProfit: `Ваша выгода — ${profit} р`
             }
         },
         menuLink: function() {
             return this.menuLinks[this.configuration.tab];
         },
         orderLink: function() {
-            const { tab, numDishes, daysSelection, numDays, isDessertAdded } = this.configuration;
-            const link = (configs) => `#order:${configs}=${this.totalPrice.basketPrice}`;
-            let configs = `Рацион "${dict.menus[tab]}":` + 
-                `${dict.numDishes[numDishes]}${isDessertAdded ? '+десерт' : ''},` +
-                `${dict.daysSelect[daysSelection][numDays]}`;
-            this.savedConfigs.forEach(config => {
-                configs += ` + Рацион "${dict.menus[config.tab]}":` +
-                    `${dict.numDishes[config.numDishes]}${config.isDessertAdded ? '+десерт' : ''},` +
-                    `${dict.daysSelect[config.daysSelection][config.numDays]}`;
-            });
-            return link(configs);
+            const configs = this.allConfigs.reduce((text, config) => text += this.configToText(config), '');
+            return `#order:${configs}=${this.totalPrice.basketPrice}`;
         },
         isMobile: function() {
             return /Mobi/i.test(window.navigator.userAgent);
@@ -223,6 +244,10 @@ export const appComp = {
         isMobileSafari: function() {
             const isSafari = window.navigator.userAgent.indexOf("Safari") > -1;
             return this.isMobile && isSafari;
+        },
+        isCardAvailable: function() {
+            const isAvanSaved =  this.savedConfigs.length && this.savedConfigs.find(config => config.tab === 'avan');
+            return this.configuration.tryMode || this.configuration.tab === 'avan' || isAvanSaved;
         }
     }
 };

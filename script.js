@@ -18,7 +18,8 @@ import {
     phoneInputComp,
     dishesExapmleComp,
     dishExampleComp,
-    dishExamplePopup
+    dishExamplePopup,
+    tryButtonComp
 } from './modules/components.js';
 
 Vue.component('tab', tabComp);
@@ -37,6 +38,7 @@ Vue.component('pre-cart-item', preCartItemComp);
 Vue.component('pre-cart', preCartComp);
 Vue.component('payment-method', paymentMethodComp);
 Vue.component('phone-input', phoneInputComp);
+Vue.component('try-btn', tryButtonComp);
 
 const app = new Vue(appComp);
 try {

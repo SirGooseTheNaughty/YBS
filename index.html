@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YSB new configurator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
@@ -18,7 +19,8 @@
             <div class="left">
                 <tagline :tab="configuration.tab"></tagline>
                 <div class="leftContent">
-                    <div class="numDishes">
+                    <try-btn :checked="configuration.tryMode" :toggle="toggleTryMode" class-name="mobile"></try-btn>
+                    <div v-if="!configuration.tryMode" class="numDishes">
                         <num-dishes title="3 блюда" value="3" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
                         <num-dishes title="4 блюда" value="4" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
                         <num-dishes class="hit" title="5 блюд" value="5" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
@@ -41,21 +43,26 @@
                 </div>
             </div>
             <div class="right">
-                <div class="question q-days">Когда будете есть?</div>
-                <div class="days">
-                    <days-selection text="Каждый день" value="each" :get-is-active="isActive" :set-value="setParameter"></days-selection>
-                    <days-selection text="По будням" value="work" :get-is-active="isActive" :set-value="setParameter"></days-selection>
+                <try-btn :checked="configuration.tryMode" :toggle="toggleTryMode" class-name="desktop"></try-btn>
+                <div v-if="!configuration.tryMode" class="days-selection">
+                    <div class="question q-days">Когда будете есть?</div>
+                    <div class="days">
+                        <days-selection text="Каждый день" value="each" :get-is-active="isActive" :set-value="setParameter"></days-selection>
+                        <days-selection text="По будням" value="work" :get-is-active="isActive" :set-value="setParameter"></days-selection>
+                    </div>
                 </div>
-                <div class="question q-numDays">Количество дней</div>
-                <div class="numDaysSelect">
-                    <num-days value="5" :configuration="configuration" :get-is-active="isActive" :set-value="setParameter" :prices="prices" ></num-days>
-                    <num-days value="20" :configuration="configuration" :get-is-active="isActive" :set-value="setParameter" :prices="prices" ></num-days>
+                <div v-if="!configuration.tryMode" class="numdays-select">
+                    <div class="question q-numDays">Количество дней</div>
+                    <div class="numDaysSelect">
+                        <num-days value="5" :configuration="configuration" :get-is-active="isActive" :set-value="setParameter" :prices="prices" ></num-days>
+                        <num-days value="20" :configuration="configuration" :get-is-active="isActive" :set-value="setParameter" :prices="prices" ></num-days>
+                    </div>
                 </div>
                 <promocode
+                    v-if="!configuration.tryMode"
                     :set-value="setParameter"
                     :promocode-results="promocodeResults"
                     :saved-configs="savedConfigs"
-                    :check-promocode="checkPromocodeInternally"
                     :is-promocode-valid="isPromocodeValid"
                 ></promocode>
                 <pre-cart
@@ -76,7 +83,7 @@
                 <div class="line"></div>
                 <div class="payment">
                     <payment-method text="Оплата курьеру" value="cash" :get-is-active="isActive" :set-value="setParameter"></payment-method>
-                    <payment-method v-if="configuration.tab !== 'avan'" text="Оплата онлайн" value="card" :get-is-active="isActive" :set-value="setParameter"></payment-method>
+                    <payment-method v-if="!isCardAvailable" text="Оплата онлайн" value="card" :get-is-active="isActive" :set-value="setParameter"></payment-method>
                 </div>
                 <phone-input :set-value="setParameter"></phone-input>
                 <div class="button" v-on:click="checkout">
@@ -108,20 +115,6 @@
         const promoValues = [
             {
                 codes: ['NEW'],
-                menu: '',
-                numDishes: '',
-                daysSelection: '',
-                numDays: '5',
-            },
-            {
-                codes: ['TIKTOK'],
-                menu: '',
-                numDishes: '',
-                daysSelection: '',
-                numDays: '5',
-            },
-            {
-                codes: ['ЁЛКА'],
                 menu: '',
                 numDishes: '',
                 daysSelection: '',

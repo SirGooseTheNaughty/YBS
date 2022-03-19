@@ -385,7 +385,7 @@ export const numDaysComp = {
 }
 
 export const promocodeInputComp = {
-    props: ['set-value', 'promocode-results', 'saved-configs', 'check-promocode', 'is-promocode-valid'],
+    props: ['set-value', 'promocode-results', 'saved-configs', 'is-promocode-valid'],
     data() {
         return {
             promocode: ''
@@ -424,20 +424,14 @@ export const promocodeInputComp = {
         enterPromocode: async function () {
             this.status = 'loading';
             this.setValue('promocodeResults', 'loading', 'status');
-            const isValid = this.checkPromocode(this.promocode);
-            if (isValid) {
-                const promoRes = await getPromocodeResults(this.promocode);
-                this.setValue('promocodeResults', promoRes.status, 'status');
+            const promoRes = await getPromocodeResults(this.promocode);
+            this.setValue('promocodeResults', promoRes.status, 'status');
+            if (promoRes.status === 'ok') {
+                this.setValue('promocodeResults', this.promocode, 'promocode');
                 this.setValue('promocodeResults', promoRes.type, 'type');
                 this.setValue('promocodeResults', promoRes.discount, 'discount');
-                if (promoRes.status === 'ok') {
-                    this.setValue('promocodeResults', this.promocode, 'promocode');
-                } else {
-                    this.setValue('promocodeResults', null, 'promocode');
-                }
             } else {
                 this.setValue('promocodeResults', null, 'promocode');
-                this.setValue('promocodeResults', 'strict', 'status');
             }
         },
     },
@@ -462,7 +456,7 @@ export const promocodeInputComp = {
             return this.savedConfigs.length ? 'ДВАРАЦИОНА' : 'Введите промокод';
         },
         specialDiscountApplied: function() {
-            return this.savedConfigs.length; // && this.promocodeResults.status !== 'ok';
+            return !this.isPromocodeValid && this.savedConfigs.length;
         }
     }
 }
@@ -573,5 +567,45 @@ export const phoneInputComp = {
                 }
             });
         },
+    }
+}
+
+export const tryButtonComp = {
+    props: ["checked", "toggle", "class-name"],
+    template: `
+        <button class="try-mode" :class="classNames" v-on:click="toggle">
+            <p class="try-mode__main">ПОПРОБОВАТЬ ЗА 1440 Р</p>
+            <p class="try-mode__secondary">5 блюд на 2 дня</p>
+            <div class="try-mode__icon"></div>
+            <svg class="try-mode__checkmark" width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="33" height="33" rx="16.5" fill="#74BA67"/>
+                <path d="M10 14.7692L15.3182 21L23 12" stroke="#FFF7EC" stroke-width="2" stroke-linecap="round" stroke-linejoin="bevel"/>
+            </svg>
+            <div v-html="fingerIcon"></div>
+        </button>
+    `,
+    computed: {
+        classNames: function() {
+            console.log(this.className);
+            return {
+                [this.className]: true,
+                "enabled": this.checked
+            }
+        },
+        fingerIcon: function() {
+            if (this.className === 'mobile' && !this.checked) {
+                return `
+                    <div class="try-mode__finger">
+                        <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="15.5" cy="15.5" r="1.5" fill="#FFF7EC"/>
+                            <circle cx="15.5" cy="15.5" r="7" stroke="#FFF7EC" stroke-opacity="0.8"/>
+                            <circle cx="15.5" cy="15.5" r="15" stroke="#FFF7EC" stroke-opacity="0.5"/>
+                        </svg>
+
+                        <div class="try-mode__finger-icon"></div>
+                    </div>
+                `;
+            }
+        }
     }
 }
