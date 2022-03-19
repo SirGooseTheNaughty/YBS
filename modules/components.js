@@ -590,7 +590,6 @@ export const tryButtonComp = {
     `,
     computed: {
         classNames: function() {
-            console.log(this.className);
             return {
                 [this.className]: true,
                 "enabled": this.checked
