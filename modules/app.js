@@ -167,12 +167,14 @@ export const appComp = {
                 } else if (index === 'current') {
                     price -= this.promocodeResults.discount;
                 }
-            } else if (this.savedConfigs.length) {
-                const maxPriceConfig = this.getMinMaxPriceConfig(this.allConfigs, null, 'max');
-                if (maxPriceConfig !== config) {
-                    price *= 0.9;
-                }
             }
+            // ДЛЯ СКИДКИ ЗА 2+ НАБОРА
+            // else if (this.savedConfigs.length) {
+            //     const maxPriceConfig = this.getMinMaxPriceConfig(this.allConfigs, null, 'max');
+            //     if (maxPriceConfig !== config) {
+            //         price *= 0.9;
+            //     }
+            // }
             return { price, dessertPrice, drinkPrice, profit };
         },
         configToText: function(config = this.configuration) {

@@ -453,10 +453,14 @@ export const promocodeInputComp = {
             return text || '';
         },
         placeholder: function() {
-            return this.savedConfigs.length ? 'ДВАРАЦИОНА' : 'Введите промокод';
+            // ДЛЯ СКИДКИ ЗА 2+ НАБОРА
+            // return this.savedConfigs.length ? 'ДВАРАЦИОНА' : 'Введите промокод';
+            return 'Введите промокод';
         },
         specialDiscountApplied: function() {
-            return !this.isPromocodeValid && this.savedConfigs.length;
+            // ДЛЯ СКИДКИ ЗА 2+ НАБОРА
+            // return !this.isPromocodeValid && this.savedConfigs.length;
+            return false;
         }
     }
 }
