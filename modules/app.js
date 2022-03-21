@@ -1,6 +1,6 @@
 import { fetchData, connectBasket, checkout, checkPromocodeInternally } from './service.js';
 import { pricesData } from './prices.js';
-import { dict, defaultConfigs } from './data.js';
+import { dict, defaultTryConfig } from './data.js';
 
 export const appComp = {
     el: '#app',
@@ -14,6 +14,13 @@ export const appComp = {
                 isDessertAdded: false,
                 isDrinkAdded: false,
                 tryMode: false,
+            },
+            savedStdConfig: {
+                numDishes: '5',
+                daysSelection: 'work',
+                numDays: '20',
+                isDessertAdded: false,
+                isDrinkAdded: false,
             },
             day: 0,
             promocodeResults: {
@@ -66,9 +73,18 @@ export const appComp = {
         toggleTryMode: function() {
             this.configuration.tryMode = !this.configuration.tryMode;
             this.savedConfigs = [];
-            this.configuration = {
-                ...this.configuration,
-                ...(this.configuration.tryMode ? defaultConfigs.try : defaultConfigs.std)
+            if (this.configuration.tryMode) {
+                const { numDishes, daysSelection, numDays, isDessertAdded, isDrinkAdded } = this.configuration;
+                this.savedStdConfig = { numDishes, daysSelection, numDays, isDessertAdded, isDrinkAdded };
+                this.configuration = {
+                    ...this.configuration,
+                    ...defaultTryConfig
+                }
+            } else {
+                this.configuration = {
+                    ...this.configuration,
+                    ...this.savedStdConfig
+                }
             }
         },
         isActive: function(parameter, value, subParameter = null) {

@@ -62,15 +62,10 @@ export const dict = {
         },
     }
 };
-export const defaultConfigs = {
-    std: {
-        numDishes: '5',
-        daysSelection: 'work',
-        numDays: '20',
-    },
-    try: {
-        numDishes: '5',
-        daysSelection: 'work',
-        numDays: '2',
-    }
-}
+export const defaultTryConfig = {
+    numDishes: '5',
+    daysSelection: 'work',
+    numDays: '2',
+    isDessertAdded: true,
+    isDrinkAdded: true,
+};
