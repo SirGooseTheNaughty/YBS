@@ -1,5 +1,5 @@
 import { fetchData, connectBasket, checkout, checkPromocodeInternally } from './service.js';
-import { pricesData } from './prices.js';
+import { pricesData, oldPricesData } from './prices.js';
 import { dict, defaultTryConfig } from './data.js';
 
 export const appComp = {
@@ -44,6 +44,7 @@ export const appComp = {
                 y: 0
             },
             prices: pricesData,
+            oldPrices: oldPricesData,
             menuLinks: {home: '#home', lite: '#lite', avan: '#avan'},
             dishesX: 0,
             promoValues: [],
@@ -199,6 +200,22 @@ export const appComp = {
                 `${dict.numDishes[numDishes]}${isDessertAdded ? '+десерт' : ''}${isDrinkAdded ? '+напиток' : ''},` +
                 `${dict.daysSelect[daysSelection][numDays]};`);
         },
+        getOldPriceStyle: function(config) {
+            const { tab, numDishes, daysSelection, numDays, tryMode } = config;
+
+            if (tryMode || !this.oldPrices) {
+                return { '--old-price': '' };
+            }
+
+            const price = this.oldPrices[tab][numDishes][daysSelection][numDays];
+            if (!price) {
+                return { '--old-price': '' };
+            }
+
+            let priceArr = String(price).split('');
+            priceArr.splice(priceArr.length - 3, 0, ' ');
+            return { '--old-price': `'${priceArr.join('')} р'` };
+        },
     },
     computed: {
         allConfigs: function() { return [...this.savedConfigs, this.configuration]; },
@@ -266,6 +283,6 @@ export const appComp = {
         isCardAvailable: function() {
             const isAvanSaved =  this.savedConfigs.length && this.savedConfigs.find(config => config.tab === 'avan');
             return this.configuration.tryMode || this.configuration.tab === 'avan' || isAvanSaved;
-        }
+        },
     }
 };

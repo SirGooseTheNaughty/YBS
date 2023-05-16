@@ -466,13 +466,13 @@ export const promocodeInputComp = {
 }
 
 export const preCartItemComp = {
-    props: ['config', 'index', 'price', 'delete-config'],
+    props: ['config', 'index', 'price', 'delete-config', 'old-price-style'],
     template: `
         <div class="pre-cart__config">
             <div class="pre-cart__item pre-cart__menu">
-                <div class="pre-cart__item-value">
+                <div class="pre-cart__item-value" >
                     <p>{{ text }}</p>
-                    <p class="pre-cart__item-price">{{ price.price + 'р' }}</p>
+                    <p class="pre-cart__item-price" :style="oldPriceStyle">{{ price.price + 'р' }}</p>
                 </div>
                 <div v-if="config.isDessertAdded" class="pre-cart__item-value">
                     <p>${preCardAdditives.dessert}</p>
@@ -500,7 +500,7 @@ export const preCartItemComp = {
 }
 
 export const preCartComp = {
-    props: ['configuration', 'saved-configs', 'add-config', 'delete-config', 'promocode-results', 'compute-price'],
+    props: ['configuration', 'saved-configs', 'add-config', 'delete-config', 'promocode-results', 'compute-price', 'get-old-price-style'],
     template: `
         <div class="pre-cart">
             <pre-cart-item
@@ -510,6 +510,7 @@ export const preCartComp = {
                 :index="index"
                 :key="index"
                 :delete-config="deleteConfig"
+                :old-price-style="getOldPriceStyle(config)"
             ></pre-cart-item>
             <pre-cart-item
                 :config="configuration"
@@ -517,6 +518,7 @@ export const preCartComp = {
                 index="current"
                 key="current"
                 :delete-config="deleteCurrent"
+                :old-price-style="getOldPriceStyle(configuration)"
             ></pre-cart-item>
             <div class="pre-cart__add" v-on:click="addConfig">
                 <div class="plus">${preCardPlus}</div>

@@ -19,7 +19,7 @@
             <div class="left">
                 <tagline :tab="configuration.tab"></tagline>
                 <div class="leftContent">
-                    <try-btn :checked="configuration.tryMode" :toggle="toggleTryMode" class-name="mobile"></try-btn>
+                    <!-- <try-btn :checked="configuration.tryMode" :toggle="toggleTryMode" class-name="mobile"></try-btn> -->
                     <div v-if="!configuration.tryMode" class="numDishes">
                         <num-dishes title="3 блюда" value="3" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
                         <num-dishes title="4 блюда" value="4" :get-is-active="isActive" :set-value="setParameter"></num-dishes>
@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="right">
-                <try-btn :checked="configuration.tryMode" :toggle="toggleTryMode" class-name="desktop"></try-btn>
+                <!-- <try-btn :checked="configuration.tryMode" :toggle="toggleTryMode" class-name="desktop"></try-btn> -->
                 <div v-if="!configuration.tryMode" class="days-selection">
                     <div class="question q-days">Когда будете есть?</div>
                     <div class="days">
@@ -72,6 +72,7 @@
                     :delete-config="deleteConfig"
                     :promocode-results="promocodeResults"
                     :compute-price="computePrice"
+                    :get-old-price-style="getOldPriceStyle"
                 ></pre-cart>
                 <div class="price">
                     <div class="priceLabel">Итого:</div>
